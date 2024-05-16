@@ -2,6 +2,7 @@ import { salvarSubcategoria, listarSucategorias, editarSubcategoria, deletarSubc
 import { deletarProduto, listarProdutosSubcategoria } from "../repository/produtoRepository.js"
 import { Router } from "express";
 import { listarCategoria } from "../repository/categoriaRepository.js";
+import { deletarGrupo, listarGruposSubcategoria } from "../repository/gruposRepository.js";
 let servidor = Router();
 
 servidor.post('/subcategoria/:categoria', async (req, resp) => {
@@ -70,11 +71,18 @@ servidor.delete('/subcategoria/:id', async (req, resp) => {
     try {
         const id = req.params.id;
         const produtosSubcategoria = await listarProdutosSubcategoria(id);
+        const gruposSubcategoria = await listarGruposSubcategoria(id);
+        if (gruposSubcategoria.length > 0) {
+            for (const grupo of gruposSubcategoria) {
+                await deletarGrupo(grupo.idGrupo, grupo);
+            }
+        }
 
         if (produtosSubcategoria.length > 0) {
             for (const produto of produtosSubcategoria) {
                 await deletarProduto(produto.idProduto, produto);
             }
+
         }
 
         await deletarSubcategoria(id);

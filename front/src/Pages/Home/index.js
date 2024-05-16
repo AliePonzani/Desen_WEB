@@ -1,15 +1,14 @@
 import './index.scss';
-import axios from 'axios'
 
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
+import { buscarDados } from '../../Service/api.service';
 
 import Login from '../../Components/Login/Login';
 import CarrosselPrincipal from '../../Components/Carrossel/principal';
 import CarrosselFotos from '../../Components/Carrossel/fotos';
-// import dados from "../../apoio/banco.json";
 import CardsProdutos from '../../Components/CardProdutos/CardProdutos';
 import CarrosselCars from '../../Components/Carrossel/cards';
 import CardEvento from '../../Components/CardEvento/CardEvento';
@@ -24,10 +23,11 @@ const style = {
 
 export default function Home() {
   const [produtos, setProdutos] = useState();
-  const [dadosSubcategorias, setDadosSubcategorias] = useState([]);
   const [subcategorias, setSubcategorias] = useState([]);
+  const [eventos, setEventos] = useState([]);
+
   const [produtosPorSubcategoria, setProdutosPorSubcategoria] = useState({});
-  const [eventos, setEventos] = useState({});
+
   const [botaoSelecionado, setBotaoSelecionado] = useState(null);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -46,34 +46,36 @@ export default function Home() {
   };
 
   useEffect(() => {
-
     async function fetchData() {
       try {
-        let eventos = await axios.get('http://127.0.0.1:5000/evento');
-        let info = eventos.data;
-        setEventos(info);
+        const eventos = await buscarDados("evento")
+        setEventos(eventos);
 
-        let produtos = await axios.get('http://127.0.0.1:5000/produto');
-        let infoProdutos = produtos.data;
-        setProdutos(infoProdutos);
+        let subcategorias = await buscarDados("subcategoria");
 
-        const subcategoriasArray = [];
-        infoProdutos.forEach(item => {
-          if (!subcategoriasArray.includes(item.nomeSubcategoria)) {
-            subcategoriasArray.push(item.nomeSubcategoria);
+        const nomesubcategoriasArray = [];
+        subcategorias.forEach(item => {
+          if (!nomesubcategoriasArray.includes(item.nomeSubcategoria)) {
+            nomesubcategoriasArray.push(item.nomeSubcategoria);
           }
         });
-        setSubcategorias(subcategoriasArray);
-        setBotaoSelecionado(subcategoriasArray[0]);
-        const produtosFiltrados = infoProdutos.filter(infoProdutos => infoProdutos.nomeSubcategoria === subcategoriasArray[0]);
-        setProdutosPorSubcategoria(produtosFiltrados);
-        console.log(produtosFiltrados);
+        setSubcategorias(nomesubcategoriasArray);
+        setBotaoSelecionado(nomesubcategoriasArray[0]);
+
+        const infoProdutos = await buscarDados("produto");
+        setProdutos(infoProdutos);
+        if (infoProdutos && infoProdutos.length > 0) {
+          const produtosFiltrados = infoProdutos.filter(infoProdutos => infoProdutos.nomeSubcategoria === nomesubcategoriasArray[0]);
+          setProdutosPorSubcategoria(produtosFiltrados);
+        } else {
+          console.log("Lista de produtos vazia.");
+        }
+
 
       } catch (error) {
-        console.error('Erro ao buscar os dados:', error);
+        console.error('Erro ao buscar os dados HOME:', error);
       }
     }
-
     fetchData();
   }, []);
 
@@ -84,7 +86,7 @@ export default function Home() {
         <div className='menu'>
           <a href="#eventos">Eventos</a>
           <a href="#cardapios">Cardápio</a>
-          <a href="">Sobre</a>
+          <a href="#sobre">Sobre</a>
           <a href="">Localização</a>
         </div>
         <div className='logo'><img src='/assets/img/logo circular.png'></img></div>
@@ -110,7 +112,7 @@ export default function Home() {
 
       <section className='eventos' id='eventos'>
         <h1>Eventos</h1>
-        <CarrosselCars produtosPorSubcategoria={eventos} componente={CardEvento}></CarrosselCars>
+        <CarrosselCars dados={eventos} componente={CardEvento}></CarrosselCars>
       </section>
 
       <section className='cardapios' id='cardapios'>
@@ -126,10 +128,10 @@ export default function Home() {
               </button>
             ))}
           </div>
-          <a href='http://localhost:3000/cardapio'>VER CARDÁPIO <Link to={`./cardapio/${botaoSelecionado}`}>{botaoSelecionado}</Link> COMPLETO</a>
+          <Link to={`./cardapio/${botaoSelecionado}`}>Ver cardapios {botaoSelecionado} completo</Link>
         </div>
         <div className='carrosselCards'>
-          <CarrosselCars produtosPorSubcategoria={produtosPorSubcategoria} componente={CardsProdutos}></CarrosselCars>
+          <CarrosselCars dados={produtosPorSubcategoria} componente={CardsProdutos}></CarrosselCars>
         </div>
         <div>
         </div>
@@ -137,10 +139,14 @@ export default function Home() {
       <section id='carrosselFotos'>
         <CarrosselFotos imagens={imagens2} />
       </section>
-      <section className='sobre'>
-        <img className='logo_artgula' src='/assets/img/tituloArtEGula.png'></img>
+      <section className='sobre' id='sobre'>
+        <div className='logo_artgula'>
+          <img src='/assets/img/tituloArtEGula.png'></img>
+        </div>
         <div className='conteudo_sobre'>
-          <img className='fotoDona' src='/assets/img/fotoDona.png'></img>
+          <div className='fotoDona'>
+            <img src='/assets/img/fotoDona.png'></img>
+          </div>
           <p>Somos a Art & Gula, uma doceria e café localizada no
             charmoso bairro de Moema em São Paulo.
             Nossa loja foi pensada para proporcionar uma
@@ -161,20 +167,14 @@ export default function Home() {
         </div>
         <img className='avaliacaoImg' src='/assets/img/avaliacao3.png'></img>
         <img className='nota' src='/assets/img/nota.png'></img>
-
-
       </section>
-      <section className='maps'>
 
-        <div className='googleMaps'>
-          <iframe
-            width="100%"
-            height="420"
-            src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Av.%20Jurema,%20401%20-%20Moema,%20S%C3%A3o%20Paulo%20-%20SP,%2004079-001+(Art&amp;Gula)&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
-          >
-            <a href="https://www.gps.ie/">gps systems</a>
-          </iframe>
-        </div>
+      <section className='maps'>
+        <iframe
+          src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Av.%20Jurema,%20401%20-%20Moema,%20S%C3%A3o%20Paulo%20-%20SP,%2004079-001+(Art&amp;Gula)&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+        >
+          <a href="https://www.gps.ie/">gps systems</a>
+        </iframe>
         <p>Endereço: Av. Jurema, 401 - Moema,<br />
           São Paulo - SP, 04079-001<br />
           Telefone: (11) 95865-5550<br />
@@ -182,21 +182,21 @@ export default function Home() {
           Terça à Sexta: 10h - 19h<br />
           Sábado, Domingo e feriados: 9h - 19h
         </p>
-
-
       </section>
+
       <footer className='rodape'>
-        
-        <img className='logo_rodape' src='/assets/img/logo circular.png'></img>
+        <div className='logo_rodape'>
+          <img src='/assets/img/logo circular.png'></img>
+        </div>
+
+
         <div className='item_rodape'>
           <div >
             <h4>Produtos</h4>
             <ul>
-              <li><a href='#'>Páscoa</a></li>
-              <li><a href='#'>Bebidas</a></li>
-              <li><a href='#'>Doceria</a></li>
-              <li><a href='#'>Brunch</a></li>
-              <li><a href='#'>Cardapios</a></li>
+              {subcategorias.map((cardapio) => (
+                <li><a href={`./cardapio/${cardapio}`}>{cardapio}</a></li>
+              ))}
             </ul>
           </div>
 

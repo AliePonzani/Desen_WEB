@@ -5,6 +5,7 @@ import { salvarEvento, editarEvento, listarEventos, deletarEvento, listarUmEvent
 import { Router } from "express";
 let servidor = Router();
 
+
 const upload = multer({ dest: 'storage/eventos' })
 
 servidor.put('/evento/imagem/:id', upload.single('imgEvento'), async (req, resp) => {

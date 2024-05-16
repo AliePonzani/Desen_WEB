@@ -1,4 +1,4 @@
-import { deletarGrupo, editarGrupo, listaGrupos, listarGrupo, salvarGrupo } from "../repository/gruposRepository.js";
+import { deletarGrupo, editarGrupo, listaGrupos, listarGrupo, listarGruposSubcategoria, salvarGrupo } from "../repository/gruposRepository.js";
 import { listarProdutoGrupo } from "../repository/produtoRepository.js";
 import { listarSucategoria } from "../repository/subcategoriaRepository.js";
 
@@ -35,7 +35,20 @@ servidor.get('/grupo/:id', async (req, resp) => {
         let exibirGrupo = await listarGrupo(grupo);
         resp.status(200).json(exibirGrupo);
     } catch (error) {
-        resp.status(500).json({ message: 'Erro ao buscar subcategoria', error: error.message });
+        resp.status(500).json({ message: 'Erro ao buscar grupo', error: error.message });
+    }
+});
+
+servidor.get('/grupo/subcategoria/:id', async (req, resp) => {
+    try {
+        let subcategoria = req.params.id;
+        let grupos = await listarGruposSubcategoria(subcategoria);
+        if (grupos.length < 1) {
+            throw new Error("Nenhum grupo Encontrado!");
+        }
+        resp.status(200).json(grupos);
+    } catch (error) {
+        resp.status(404).json({ error: error.message });
     }
 });
 

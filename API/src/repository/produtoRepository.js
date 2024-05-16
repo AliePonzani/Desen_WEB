@@ -1,6 +1,6 @@
 import con from "./conection.js";
 
-export async function salvarProduto(subcategoria, grupo, produto) {
+export async function salvarProduto(subcategoria, produto) {
     try {
         let comando = `
         insert into produto (
@@ -19,7 +19,7 @@ export async function salvarProduto(subcategoria, grupo, produto) {
             produto.descricaoProduto,
             produto.valorProduto,
             produto.pesoProduto,
-            grupo,
+            grupo.grupoProduto,
             subcategoria
         ]);
         let info = resp[0];
@@ -90,7 +90,7 @@ export async function listarProdutoGrupo(grupo) {
 
 };
 
-export async function editarProduto(subacategoria, id, produto) {
+export async function editarProduto(id, produto) {
     try {
         let comando = `
             UPDATE produto SET 
@@ -98,7 +98,6 @@ export async function editarProduto(subacategoria, id, produto) {
             descricaoProduto = ?, 
             valorProduto = ?, 
             pesoProduto = ?,
-            subcategoriaProduto = ?,
             grupoProduto = ?
             WHERE idProduto = ?
         `;
@@ -108,7 +107,6 @@ export async function editarProduto(subacategoria, id, produto) {
             produto.descricaoProduto,
             produto.valorProduto,
             produto.pesoProduto,
-            subacategoria,
             produto.grupoProduto,
             id
         ]);

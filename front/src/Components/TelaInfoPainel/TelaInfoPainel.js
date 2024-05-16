@@ -3,97 +3,200 @@ import axios from 'axios';
 import { MdEdit, MdDelete } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
 import React, { useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import ModalCardapio from '../ModalCardapio';
+import ModalProduto from '../ModalProduto';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
+import { buscarDados } from '../../Service/api.service';
 
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: "40%",
+    transform: 'translate(-30%, -50%)'
+};
 
-export default function Tela_Info_Painel(params) {
-    const [produtos, setProdutos] = useState();
+export default function TelaInfoPainel(params) {
+    const [produtos, setProdutos] = useState([]);
+    const [cardapios, setCardapios] = useState({});
+    const [componente, setComponente] = useState();
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                let produtos = await axios.get('http://127.0.0.1:5000/produto');
-                let infoProdutos = produtos.data;
-                setProdutos(infoProdutos);
-                console.log(infoProdutos);
-            } catch (error) {
-                console.error('Erro ao buscar os dados:', error);
-            }
-        }
-        fetchData();
-    }, [produtos]);
+    const [open, setOpen] = useState(false);
+    const handleClose = () => setOpen(false);
 
+    const [openDialog, setOpenDialog] = useState(false);
+    const handleCloseDialog = () => setOpenDialog(false);
 
-    async function deletar(params) {
+    const [id, setId] = useState();
+    const [tipo, setTipo] = useState();
+
+    const categorias = { nomeSubcategorias: ["Eventos", "Fotos"], idSubcategorias: [0, 1] };
+
+    let escolha = params.titulo === "Cardápio" ? cardapios : categorias;
+
+    const deletar = async () => {
         try {
-            await axios.delete(`http://127.0.0.1:5000/produto/${params}`)
-            console.log("produto deletado");
+            const resp = await axios.delete(`http://127.0.0.1:5000/${tipo}/${id}`);
+            if (resp.status === 200) {
+                alert(`${tipo} deletado com sucesso!`);
+            }
         } catch (error) {
-            console.log("erro ao deletar produto", error);
+            alert(`Erro ao deletar ${tipo}` + error);
         }
+        handleCloseDialog();
     }
 
-    const renderizarProdutosPorSubcategoria = (nomeSubcategoria) => {
+    const handleOpenDialog = (id, tipo) => {
+        setId(id);
+        setTipo(tipo);
+        setOpenDialog(true);
+    };
 
-        if (!produtos || produtos.length === 0) {
+    const handleOpen = (cardapio, componente, idProduto, tipo) => {
+        const teste = React.createElement(componente, { cardapio: cardapio, handleClose: handleClose, idProduto: idProduto, tipo: tipo });
+        setComponente(teste);
+        setOpen(true);
+    };
+
+    const renderizarProdutosPorSubcategoria = (nomeSubcategoria) => {
+        if (!produtos || !Array.isArray(produtos)) {
             return (
                 <div className='corpoTabela itens'>
                     <p>Não há nada cadastrado ainda!</p>
                 </div>
             );
         }
-
-        const produtosFiltrados = produtos.filter(produto => produto.nomeSubcategoria === nomeSubcategoria);
-
-        return produtosFiltrados.map(produto => (
-            <div className='corpoTabela itens'>
-                <p>{produto.nomeProduto}</p>
-                <p>{produto.nomeGrupo}</p>
-                <div>
-                    <button className='editar'><MdEdit /> Editar</button>
-                    <button className='deletar' onClick={() => deletar(produto.idProduto)}><MdDelete /> Deletar</button>
+        const temProdutos = produtos.some(produto => produto.nomeSubcategoria === nomeSubcategoria);
+        if (!temProdutos) {
+            return (
+                <div className='corpoTabela itens'>
+                    <p>Não há nada cadastrado ainda!</p>
                 </div>
-            </div>
-        ));
+            );
+        } else {
+            const produtosFiltrados = produtos.filter(produto => produto.nomeSubcategoria === nomeSubcategoria);
+            return produtosFiltrados.map(produto => (
+                <div className='corpoTabela itens' key={produto.idProduto}>
+                    <p>{produto.nomeProduto}</p>
+                    <p>{produto.nomeGrupo}</p>
+                    <p>{produto.valorProduto}</p>
+                    <div>
+                        <button className='editar'
+                            onClick={() => handleOpen(produto.subcategoriaProduto, ModalProduto, produto, "alterar")}
+                        ><MdEdit /> Editar</button>
+                        <button className='deletar' onClick={() => handleOpenDialog(produto.idProduto, "produto")}><MdDelete /> Deletar</button>
+                    </div>
+                </div>
+            ));
+        }
     };
 
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const infoProdutos = await buscarDados("produto");
+                setProdutos(infoProdutos);
 
+                const listaCardapios = await buscarDados("subcategorias/categoria/7");
+                const cardapiosArray = {
+                    nomeSubcategorias: [],
+                    idSubcategorias: []
+                };
+
+                listaCardapios.forEach(cardapio => {
+                    if (!cardapiosArray.idSubcategorias.includes(cardapio.idSubcategoria)) {
+                        cardapiosArray.nomeSubcategorias.push(cardapio.nomeSubcategoria);
+                        cardapiosArray.idSubcategorias.push(cardapio.idSubcategoria);
+                    }
+                });
+                setCardapios(cardapiosArray);
+            } catch (error) {
+                console.error('Erro ao buscar os dados PAINEL:', error);
+            }
+        }
+        fetchData();
+    }, [open, openDialog])
+
+    if (!escolha.nomeSubcategorias || !Array.isArray(escolha.nomeSubcategorias)) {
+        return (
+            <section className='telaInfo'>
+                <h1 className='titulo'>{params.titulo}</h1>
+                <div className='tabelas'>
+                    <h1>Nenhumaaaa tabela encontrada ou cadastrada</h1>
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section className='telaInfo'>
+            <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"Realmente deseja excluir este item?"}
+                </DialogTitle>
+                <DialogActions>
+                    <button onClick={() => deletar()}>Deletar</button>
+                    <button onClick={handleCloseDialog} >Cancelar</button>
+                </DialogActions>
+            </Dialog>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    {componente}
+                </Box>
+            </Modal>
             <h1 className='titulo'>{params.titulo}</h1>
-
-            <button className='addCardapio add' style={{ visibility: params.titulo === "Cardápio" ? 'visible' : 'hidden' }}>
+            <button className='addCardapio add'
+                style={{ visibility: params.titulo === "Cardápio" ? 'visible' : 'hidden' }}
+                onClick={() => handleOpen(params.titulo, ModalCardapio, null, "salvar")}
+            >
                 <FaPlus />
                 Adicionar Cardápio
             </button>
-
             <div className='tabelas'>
-                {params.vetor.map(item =>
-                    <div className='tabela'>
+                {escolha.nomeSubcategorias.map((nomeSubcategoria, index) =>
+                    <div className='tabela' key={index}>
                         <div className='tituloTabela'>
-                            <h1>{item}</h1>
+                            <h1>{nomeSubcategoria}</h1>
                             <div className='botoesTituloTabela'>
-                                <button className='deletar' style={{ visibility: params.titulo === "Cardápio" ? 'visible' : 'hidden' }}>
+                                <button className='deletar'
+                                    style={{ visibility: params.titulo === "Cardápio" ? 'visible' : 'hidden' }}
+                                    onClick={() => handleOpenDialog(escolha.idSubcategorias[index], "subcategoria")}
+                                >
                                     <MdDelete />
-                                    Deletar
+                                    Deletar Cardápio
                                 </button>
-                                <button className='editar' style={{ visibility: params.titulo === "Cardápio" ? 'visible' : 'hidden' }}>
+                                <button className='editar'
+                                    style={{ visibility: params.titulo === "Cardápio" ? 'visible' : 'hidden' }}
+                                >
                                     <MdEdit />
-                                    Editar
+                                    Editar Cardápio
                                 </button>
-                                <button className='add'><FaPlus /> Adicionar</button>
+                                <button className='add' onClick={() => handleOpen(escolha.idSubcategorias[index], ModalProduto, null, "salvar")}><FaPlus /> Adicionar Produto</button>
                             </div>
                         </div>
                         <div className='cabecalhoTabela itens'>
                             <p>Título</p>
                             <p>Grupo</p>
+                            <p>Preço</p>
                             <p>Ações</p>
                         </div>
-
-                        {renderizarProdutosPorSubcategoria(item)}
+                        {renderizarProdutosPorSubcategoria(nomeSubcategoria)}
                     </div>
                 )}
             </div>
         </section>
-    )
+    );
 }

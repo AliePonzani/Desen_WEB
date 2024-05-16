@@ -1,41 +1,16 @@
 import './index.scss';
-import axios from 'axios';
 import { AiFillHome } from "react-icons/ai";
 import { MdOutlineMenuBook } from "react-icons/md";
-import Tela_Info_Painel from '../../Components/TelaInfoPainel/TelaInfoPainel.js';
-import React, { useEffect, useState } from 'react';
+import TelaInfoPainel from '../../Components/TelaInfoPainel/TelaInfoPainel.js';
+import React, { useState } from 'react';
 
 export default function Painel() {
-    const [selectedItem, setSelectedItem] = useState("Cardápio");
-    const [categorias, setCategorias] = useState(["Eventos", "Fotos"]);
-    const [cardapios, setCardapios] = useState([]);
-    const [selectedArray, setSelectedArray] = useState(cardapios);
+    const [selectedItem, setSelectedItem] = useState("Painel de Controle");
 
     const handleSelectItem = (item) => {
         setSelectedItem(item);
-        let escolha = [];
-        escolha = selectedItem === 'Cardápio' ? categorias : cardapios;
-        setSelectedArray(escolha);
-        console.log(escolha);
     };
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                let listaCardapios = await axios.get('http://127.0.0.1:5000/subcategorias/categoria/7');
-                const nomeSubcategorias = listaCardapios.data.map(item => item.nomeSubcategoria);
-                console.log(nomeSubcategorias);
-                setCardapios(nomeSubcategorias);
-            } catch (error) {
-                console.error('Erro ao buscar os dados:', error);
-            }
-        }
-        fetchData();
-    }, [])
-
-
-
-    //visibility: params.titulo === "Cardápio" ? 'visible' : 'hidden'
     return (
         <main className='telaPianel'>
             <section className='toolBar'>
@@ -55,7 +30,7 @@ export default function Painel() {
                     </nav>
                 </div>
             </section>
-            <Tela_Info_Painel titulo={selectedItem} vetor={selectedArray}></Tela_Info_Painel>
+            <TelaInfoPainel titulo={selectedItem} ></TelaInfoPainel>
         </main>
     )
 }

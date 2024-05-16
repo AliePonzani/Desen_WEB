@@ -1,28 +1,37 @@
 .modal-adicionar {
     display: flex;
     flex-direction: column;
-    width: 515px;
-    height: 590px;
+    width: 100%;
     border-radius: 34px;
     border: 1px solid #a97f2c;
     background-color: #FFFFFF;
-    padding: 28px 20px;
+    padding: 28px 50px;
     gap: 30px;
 
     .area_arquivo {
         display: flex;
         justify-content: center;
+
+        .arquivo_campo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 220px;
+            height: 200px;
+            border-radius: 2px;
+            background-color: #9A9A9A;
+            overflow: hidden;
+
+            .imagem-arquivo {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
     }
 
-    .arquivo_campo {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 220px;
-        height: 200px;
-        border-radius: 2px;
-        background-color: #9A9A9A;
-    }
+
+
 
     .icon_arquivo {
         font-size: 64px;
@@ -40,6 +49,14 @@
             background: transparent;
             outline: 0;
             width: 75%;
+        }
+    }
+
+    .camposInput {
+        display: flex;
+
+        label {
+            text-wrap: nowrap;
         }
     }
 
@@ -71,6 +88,7 @@
     .button_salvar {
         display: flex;
         justify-content: flex-end;
+
         a {
             display: flex;
             justify-content: center;
@@ -82,7 +100,12 @@
             color: #ffffff;
             background-color: #FF9E87;
             border-radius: 5px;
+            text-transform: uppercase;
         }
 
     }
+
+
+
+
 }

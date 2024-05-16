@@ -19,7 +19,6 @@ export default function Cardapio() {
 
     const handleSelectItem = (item) => {
         setSelectedItem(item);
-        console.log(dadosSubcategorias);
         dadosSubcategorias.forEach(element => {
             if (item == element.nomeSubcategoria) {
                 item = element.idSubcategoria;

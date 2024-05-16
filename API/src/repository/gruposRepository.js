@@ -94,7 +94,6 @@ export async function editarGrupo(subcategoria, id, grupo) {
     }
 }
 
-
 //verifica o DELETE das tabelas relacionadas
 export async function deletarGrupo(id, grupo) {
     try {

@@ -26,15 +26,14 @@ servidor.put('/produto/imagem/:id', upload.single('imgProduto'), async (req, res
 
 })
 
-servidor.post('/produto/:subcategoria/:grupo', async (req, resp) => {
+servidor.post('/produto/:subcategoria', async (req, resp) => {
     try {
         let produto = req.body;
         let subcategoria = req.params.subcategoria;
-        let grupo = req.params.grupo;
         await listarSucategoria(subcategoria);
         await listarGrupo(grupo);
 
-        let produtoInserido = await salvarProduto(subcategoria, grupo, produto);
+        let produtoInserido = await salvarProduto(subcategoria, produto);
         resp.status(200).json(produtoInserido);
     } catch (error) {
         resp.status(500).json({ error: error.message });
@@ -45,7 +44,7 @@ servidor.get('/produto', async (req, resp) => {
     try {
         let listaProdutos = await listarProdutos();
         if (listaProdutos.length === 0) {
-            throw new Error("Nenhum produto encontrado!");
+            return resp.status(204).send("Nenhum produto encontrado!");
         }
         resp.status(200).json(listaProdutos);
     } catch (error) {
@@ -90,14 +89,11 @@ servidor.get('/produto/subcategoria/:id', async (req, resp) => {
 });
 
 
-servidor.put('/produto/:subcategoria/:id', async (req, resp) => {
+servidor.put('/produto/:id', async (req, resp) => {
     try {
         const id = req.params.id;
-        const subcategoria = req.params.subcategoria;
         const produto = req.body;
-
-        const produtoAtualizado = await editarProduto(subcategoria, id, produto);
-
+        const produtoAtualizado = await editarProduto(id, produto);
         resp.status(200).json(produtoAtualizado);
     } catch (error) {
         resp.status(500).json({ error: error.message });

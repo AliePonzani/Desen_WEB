@@ -15,7 +15,6 @@ export default function GrupoCardapio(params) {
         ovosmexidos,
         panquecas
     ];
-    console.log(produtosPorGrupo);
 
     return (
         <div className="grupo-cardapio">

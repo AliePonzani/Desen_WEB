@@ -14,7 +14,6 @@
         a {
             text-decoration: none;
             color: var(--cor-cinza-texto);
-
             align-content: center;
         }
 
@@ -53,6 +52,7 @@
     }
 
     section {
+        max-width: 100%;
         height: 100vh;
         display: flex;
         flex-direction: column;
@@ -131,70 +131,72 @@
         display: flex;
         flex-direction: column;
         background-color: #F6CABC;
-        width: 100%;
-        height: 750px;
-        gap: 36px;
+        padding: 18px 120px;
+        // gap: 36px;
+
+        .logo_artgula {
+            width: 30%;
+
+            img {
+                width: 100%;
+            }
+        }
 
         .conteudo_sobre {
             display: flex;
-            flex-direction: row;
-            padding: 24px 120px;
             align-items: center;
+            justify-content: center;
             gap: 70px;
+
+            .fotoDona {
+                height: 90%;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+
+            }
+
+            p {
+                color: var(--cor-dourado);
+                font-family: "Playfair";
+                font-size: 1.5rem;
+                width: 60%;
+            }
         }
 
-        .conteudo_sobre>p {
-            color: var(--cor-dourado);
-            font-family: "Playfair";
-            line-height: 50px;
-            font-size: 24px;
-        }
-
-        .logo_artgula {
-            width: 460px;
-            height: 109px;
-
-        }
-
-        .fotoDona {
-            width: 360px;
-            height: 457px;
-        }
     }
 
     .maps {
         display: flex;
         flex-direction: row;
+        align-items: center;
+        justify-content: center;
         gap: 100px;
-        width: 100%;
-        height: 550px;
         background-color: #ffffff;
-        padding: 60px 120px;
-        
+        padding: 0 120px;
 
-        .googleMaps {
+        iframe {
             width: 100%;
-            max-width: 650px;
-            height: 420px;
-        }
-
-        .googleMaps>iframe {
+            height: 50%;
             border: 5px solid var(--cor-dourado);
             border-radius: 10px;
         }
 
         p {
+            width: 60%;
             color: var(--cor-dourado);
             font-family: "Playfair";
             line-height: 50px;
-            font-size: 18px;
+            font-size: 1.6vw;
         }
     }
 
     .avaliacao {
         display: flex;
         flex-direction: column;
-        width: 100%;
         height: 550px;
         gap: 30px;
 
@@ -215,15 +217,17 @@
 
     .rodape {
         display: flex;
-        width: 100%;
         height: 270px;
         background-color: #5F5F5F;
         align-items: center;
         padding: 20px 120px;
 
         .logo_rodape {
-            width: 218px;
-            height: 186px;
+            width: 20%;
+
+            img {
+                width: 100%;
+            }
         }
 
         .item_rodape {
@@ -232,7 +236,7 @@
             margin-right: 100px;
             gap: 100px;
 
-            h4{
+            h4 {
                 font-size: 20px;
                 font-family: "Playfair";
                 line-height: 50px;

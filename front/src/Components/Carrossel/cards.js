@@ -13,19 +13,19 @@ export default function CarrosselCars(params) {
 
     useEffect(() => {
         setStartIndex(0);
-    }, [params.produtosPorSubcategoria]);
+    }, [params.dados]);
 
     return (
         <div className="containerCards">
             <button className='buttonPrevious' onClick={handlePrevious} disabled={startIndex === 0}> <FaChevronCircleLeft /> </button>
             <div className="cards">
-                {Object.entries(params.produtosPorSubcategoria).slice(startIndex, startIndex + 3).map(([key, value]) => (
+                {Object.entries(params.dados).slice(startIndex, startIndex + 3).map(([key, value]) => (
                     <div key={key}>
                         {React.createElement(params.componente, { teste: value })}
                     </div>
                 ))}
             </div>
-            <button className='buttonNext' onClick={handleNext} disabled={startIndex === (params.produtosPorSubcategoria).length - 3 || (params.produtosPorSubcategoria).length < 3}> <FaChevronCircleRight /> </button>
+            <button className='buttonNext' onClick={handleNext} disabled={startIndex === (params.dados).length - 3 || (params.dados).length < 3}> <FaChevronCircleRight /> </button>
         </div>
     )
 }
