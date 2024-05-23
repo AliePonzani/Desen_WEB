@@ -57,8 +57,7 @@ export default function Painel() {
                     <FaPlus />
                     Adicionar Cardápio
                 </button>
-                <TelaInfoPainel />
-
+                <TelaInfoPainel  />
             </section>
         </main>
     )

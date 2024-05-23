@@ -48,6 +48,7 @@ export default function TelaInfoPainel(params) {
                     nomeSubcategorias: [],
                     idSubcategorias: []
                 };
+                console.log(escolha);
 
                 listaCardapios.forEach(cardapio => {
                     if (!cardapiosArray.idSubcategorias.includes(cardapio.idSubcategoria)) {
