@@ -23,6 +23,8 @@ export default function TelaInfoPainel(params) {
     const [produtos, setProdutos] = useState([]);
     const [cardapios, setCardapios] = useState({});
     const [componente, setComponente] = useState();
+    const [id, setId] = useState();
+    const [tipo, setTipo] = useState();
 
     const [open, setOpen] = useState(false);
     const handleClose = () => setOpen(false);
@@ -30,12 +32,37 @@ export default function TelaInfoPainel(params) {
     const [openDialog, setOpenDialog] = useState(false);
     const handleCloseDialog = () => setOpenDialog(false);
 
-    const [id, setId] = useState();
-    const [tipo, setTipo] = useState();
 
     const categorias = { nomeSubcategorias: ["Eventos", "Fotos"], idSubcategorias: [0, 1] };
 
     let escolha = params.titulo === "Cardápio" ? cardapios : categorias;
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const infoProdutos = await buscarDados("produto");
+                setProdutos(infoProdutos);
+
+                const listaCardapios = await buscarDados("subcategorias/categoria/7");
+                const cardapiosArray = {
+                    nomeSubcategorias: [],
+                    idSubcategorias: []
+                };
+                console.log(escolha);
+
+                listaCardapios.forEach(cardapio => {
+                    if (!cardapiosArray.idSubcategorias.includes(cardapio.idSubcategoria)) {
+                        cardapiosArray.nomeSubcategorias.push(cardapio.nomeSubcategoria);
+                        cardapiosArray.idSubcategorias.push(cardapio.idSubcategoria);
+                    }
+                });
+                setCardapios(cardapiosArray);
+            } catch (error) {
+                console.error('Erro ao buscar os dados PAINEL:', error);
+            }
+        }
+        fetchData();
+    }, [open, openDialog])
 
     const deletar = async () => {
         try {
@@ -55,22 +82,16 @@ export default function TelaInfoPainel(params) {
         setOpenDialog(true);
     };
 
-    const handleOpen = (cardapio, componente, idProduto, tipo) => {
-        const teste = React.createElement(componente, { cardapio: cardapio, handleClose: handleClose, idProduto: idProduto, tipo: tipo });
+    const handleOpen = (info, componente, id, tipo) => {
+        const teste = React.createElement(componente, { info: info, handleClose: handleClose, id: id, tipo: tipo });
         setComponente(teste);
         setOpen(true);
     };
 
     const renderizarProdutosPorSubcategoria = (nomeSubcategoria) => {
-        if (!produtos || !Array.isArray(produtos)) {
-            return (
-                <div className='corpoTabela itens'>
-                    <p>Não há nada cadastrado ainda!</p>
-                </div>
-            );
-        }
         const temProdutos = produtos.some(produto => produto.nomeSubcategoria === nomeSubcategoria);
-        if (!temProdutos) {
+
+        if (!produtos || !Array.isArray(produtos) || !temProdutos) {
             return (
                 <div className='corpoTabela itens'>
                     <p>Não há nada cadastrado ainda!</p>
@@ -85,7 +106,7 @@ export default function TelaInfoPainel(params) {
                     <p>{produto.valorProduto}</p>
                     <div>
                         <button className='editar'
-                            onClick={() => handleOpen(produto.subcategoriaProduto, ModalProduto, produto, "alterar")}
+                            onClick={() => handleOpen(produto, ModalProduto, produto.idProduto, "editar")}
                         ><MdEdit /> Editar</button>
                         <button className='deletar' onClick={() => handleOpenDialog(produto.idProduto, "produto")}><MdDelete /> Deletar</button>
                     </div>
@@ -94,35 +115,9 @@ export default function TelaInfoPainel(params) {
         }
     };
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const infoProdutos = await buscarDados("produto");
-                setProdutos(infoProdutos);
-
-                const listaCardapios = await buscarDados("subcategorias/categoria/7");
-                const cardapiosArray = {
-                    nomeSubcategorias: [],
-                    idSubcategorias: []
-                };
-
-                listaCardapios.forEach(cardapio => {
-                    if (!cardapiosArray.idSubcategorias.includes(cardapio.idSubcategoria)) {
-                        cardapiosArray.nomeSubcategorias.push(cardapio.nomeSubcategoria);
-                        cardapiosArray.idSubcategorias.push(cardapio.idSubcategoria);
-                    }
-                });
-                setCardapios(cardapiosArray);
-            } catch (error) {
-                console.error('Erro ao buscar os dados PAINEL:', error);
-            }
-        }
-        fetchData();
-    }, [open, openDialog])
-
     if (!escolha.nomeSubcategorias || !Array.isArray(escolha.nomeSubcategorias)) {
         return (
-            <section className='telaInfo'>
+            <section className='telaInfoPainel'>
                 <h1 className='titulo'>{params.titulo}</h1>
                 <div className='tabelas'>
                     <h1>Nenhumaaaa tabela encontrada ou cadastrada</h1>
@@ -132,7 +127,7 @@ export default function TelaInfoPainel(params) {
     }
 
     return (
-        <section className='telaInfo'>
+        <section className='telaInfoPainel'>
             <Dialog
                 open={openDialog}
                 onClose={handleCloseDialog}
@@ -157,14 +152,7 @@ export default function TelaInfoPainel(params) {
                     {componente}
                 </Box>
             </Modal>
-            <h1 className='titulo'>{params.titulo}</h1>
-            <button className='addCardapio add'
-                style={{ visibility: params.titulo === "Cardápio" ? 'visible' : 'hidden' }}
-                onClick={() => handleOpen(params.titulo, ModalCardapio, null, "salvar")}
-            >
-                <FaPlus />
-                Adicionar Cardápio
-            </button>
+
             <div className='tabelas'>
                 {escolha.nomeSubcategorias.map((nomeSubcategoria, index) =>
                     <div className='tabela' key={index}>
@@ -180,11 +168,20 @@ export default function TelaInfoPainel(params) {
                                 </button>
                                 <button className='editar'
                                     style={{ visibility: params.titulo === "Cardápio" ? 'visible' : 'hidden' }}
+                                    onClick={() => handleOpen(
+                                        {
+                                            nomeSubcategoria: nomeSubcategoria,
+                                            idSubcategorias: escolha.idSubcategorias[index]
+                                        },
+                                        ModalCardapio,
+                                        escolha.idSubcategorias[index],
+                                        "editar"
+                                    )}
                                 >
                                     <MdEdit />
                                     Editar Cardápio
                                 </button>
-                                <button className='add' onClick={() => handleOpen(escolha.idSubcategorias[index], ModalProduto, null, "salvar")}><FaPlus /> Adicionar Produto</button>
+                                <button className='add' onClick={() => handleOpen(null, ModalProduto, escolha.idSubcategorias[index], "salvar")}><FaPlus /> Adicionar Produto</button>
                             </div>
                         </div>
                         <div className='cabecalhoTabela itens'>

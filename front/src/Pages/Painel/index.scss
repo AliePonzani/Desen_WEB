@@ -45,4 +45,36 @@
         }
 
     }
+
+    .telaInfo {
+        width: 80%;
+        border: 1px solid;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 20px 95px;
+        background-color: var(--cor-cinza-fundo);
+
+        .titulo {
+            text-align: center;
+            padding: 20px;
+            border: 1px solid var(--cor-dourado);
+            background-color: var(--cor-principal);
+            border-radius: 8px;
+            color: var(--cor-dourado);
+        }
+
+        button{
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--cor-dourado);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+    }
 }

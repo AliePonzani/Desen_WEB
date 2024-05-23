@@ -51,6 +51,79 @@
         }
     }
 
+    .carrosselPrincipal {
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+
+        width: 85%;
+        height: 80%;
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+        align-items: center;
+        border-radius: 18px;
+        overflow: hidden;
+
+        .btnSelecionar {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            gap: 1vw;
+            padding: 1vw;
+            z-index: 3;
+        }
+
+        .displayCarrossel {
+            display: flex;
+            flex-direction: column;
+            gap: 1vw;
+            margin-right: 2vw;
+            align-items: end;
+            width: 100%;
+            z-index: 2;
+
+            h1 {
+                font-size: 6rem;
+                color: var(--cor-dourado);
+                font-family: "Allura - Regular";
+                margin-bottom: -5vh;
+            }
+
+            button {
+                display: flex;
+                gap: 16px;
+                border: none;
+                width: fit-content;
+                border-radius: 90px;
+                padding: 8px 18px;
+                font-family: "Goud Old";
+                font-size: 1.2rem;
+                align-items: center;
+            }
+        }
+    }
+
+    .eventos {
+        display: flex;
+        flex-direction: column;
+        max-width: 100%;
+        gap: 2vw;
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: -1rem;
+            font-family: "Harrigton";
+            font-weight: 100;
+            color: var(--cor-dourado);
+            font-size: 4rem;
+        }
+
+
+
+    }
+
+
     section {
         max-width: 100%;
         height: 100vh;
@@ -60,16 +133,7 @@
         align-items: center;
     }
 
-    .eventos {
-        h1 {
-            margin-top: 0;
-            margin-bottom: -1rem;
-            font-family: "Harrigton";
-            font-weight: 100;
-            color: var(--cor-dourado);
-            font-size: 4rem;
-        }
-    }
+
 
     .cardapios {
         display: flex;
@@ -79,7 +143,7 @@
         .listaCardapios {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 2vw;
             width: 85%;
             font-family: "Goud Old";
             font-size: 24px;
@@ -96,6 +160,7 @@
             .botoesLista {
                 display: flex;
                 width: 100%;
+
 
                 button {
                     background-color: transparent;
@@ -124,6 +189,7 @@
             display: flex;
             justify-content: center;
             width: 100%;
+            height: 70%;
         }
     }
 
@@ -199,6 +265,13 @@
         flex-direction: column;
         height: 550px;
         gap: 30px;
+
+        div{
+            display: flex;
+            width: 80%;
+            justify-content: center;
+            flex-wrap:wrap;
+        }
 
         .nota {
             width: 302px;

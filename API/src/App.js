@@ -1,11 +1,9 @@
+import cardapioController from "./controller/cardapioController.js";
+import grupoController from "./controller/grupoController.js";
 import produtoController from "../src/controller/produtoController.js"
 import eventoController from "../src/controller/eventoController.js"
-import subcategoriaController from "../src/controller/subcategoriaController.js"
-import categoriaController from "../src/controller/categoriaController.js";
 import imagemController from "../src/controller/imagemController.js";
-import gruposController from "../src/controller/gruposController.js";
 
-import testeController from "../src/controller/testController.js"; // Corrigido o nome do arquivo
 
 import 'dotenv/config'
 import express from 'express'
@@ -16,15 +14,16 @@ servidor.use(cors());
 servidor.use(express.json());
 
 //Controllers
+servidor.use(cardapioController);
+servidor.use(grupoController);
 servidor.use(produtoController);
 servidor.use(eventoController);
-servidor.use(subcategoriaController);
-servidor.use(categoriaController);
 servidor.use(imagemController);
-servidor.use(gruposController);
 
-servidor.use('/storage/eventos', express.static('storage/eventos'));
-servidor.use('/storage/produtos', express.static('storage/produtos'));
+servidor.use('/storage/evento', express.static('storage/evento'));
+servidor.use('/storage/produto', express.static('storage/produto'));
+servidor.use('/storage/carrossel', express.static('storage/carrossel'));
+
 
 // Tratamento de erro genérico
 servidor.use((err, req, res, next) => {

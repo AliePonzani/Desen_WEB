@@ -1,4 +1,4 @@
-.bodyCPrincipal {
+.bodyPrincipal {
     color: var(--cor-dourado);
 
     h1 {
@@ -81,9 +81,80 @@
     .container {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        width: 100%;
+        width: 85%;
         margin-top: 50px;
+        
+
+        .cabecalho-Grupo {
+            text-align: center;
+            font-size: 40px;
+            margin-top: 50px;
+        }
+    
+        .cabecalho-Grupo h1{
+            margin: 0;
+        }
+    
+        .cabecalho-Grupo p {
+            margin: 0;
+            font-family: "Goud Old";
+            font-weight: bold;
+            font-size: 18px;
+        }
+    
+        .imagens {
+            display: flex;
+            justify-content: space-around;
+            padding: 50px 0;
+
+            .imagem {
+                width: 150px;
+                height: 150px;
+                border-radius: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+            
+                img{
+                    width: 100%;
+                }                
+            }
+        }
+        
+        .produtos {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5vw;
+            border: 1px solid;
+        }
+        
+        .cabecalho {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        
+        .cabecalho h3 {
+            font-family: "Playfair";
+            margin: 0;
+        }
+    
+        .produto{
+            border-bottom: 1px solid #a97f2c3d;
+        }
+    
+        .produtos p {
+            color: var(--cor-cinza-texto);
+            margin: 0;
+            font-family: "Gould Old";
+        }
+    
+        .descricao {
+            font-size: 1em;
+        }
     }
 
 }

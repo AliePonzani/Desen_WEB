@@ -1,155 +1,146 @@
-import con from "./conection.js";
+import verificar from "./cardapioRepository.js";
+import con from "../conection.js";
 
-export async function salvarProduto(subcategoria, produto) {
-    try {
-        let comando = `
+export async function salvarProduto(grupo, cardapio, produto) {
+    let comando = `
         insert into produto (
-            nomeProduto, 
-            descricaoProduto, 
-            valorProduto, 
-            pesoProduto,
-            grupoProduto,
-            subcategoriaProduto
+            nome, 
+            descricao, 
+            valor, 
+            peso,
+            idGrupo,
+            idCardapio
             )
         values (?, ?, ?, ?, ?, ?)
-        `
+        `;
 
-        let resp = await con.query(comando, [
-            produto.nomeProduto,
-            produto.descricaoProduto,
-            produto.valorProduto,
-            produto.pesoProduto,
-            grupo.grupoProduto,
-            subcategoria
-        ]);
-        let info = resp[0];
-
-        produto.id = info.insertId;
-
-        if (resp[0].affectedRows !== 1) {
-            throw new Error('Erro ao cadastrar produto');
-        }
-
-        return produto;
-    } catch (error) {
-        throw new Error('Erro ao executar o comando SQL: ' + error.message);
-    }
-
+    let resp = await con.query(comando, [
+        produto.nome,
+        produto.descricao,
+        produto.valor,
+        produto.peso,
+        grupo,
+        cardapio
+    ]);
+    let info = resp[0].affectedRows;
+    produto.id = info.insertId;
+    verificar(resp, produto);
 }
 
 export async function listarProdutos() {
-    try {
-        let comando = `select produto.*, subcategoria.nomeSubcategoria, grupos.nomeGrupo 
-        from produto 
-        inner join subcategoria on produto.subcategoriaProduto = subcategoria.idSubcategoria
-        inner join grupos on produto.grupoProduto = grupos.idGrupo
-        `
-        let resp = await con.query(comando, []);
-        let linhas = resp[0];
-        return linhas;
-    } catch (error) {
-        throw new Error('Erro ao executar o comando SQL: ' + error.message);
-    }
-};
-
-// metodo para listar apenas um produto 
-export async function listarUmProduto(id) {
-    try {
-        let comando = `SELECT * FROM produto WHERE idProduto = ?`;
-        let resp = await con.query(comando, [id]);
-        let linhas = resp[0];
-        return linhas;
-    } catch (error) {
-        throw new Error('Erro ao executar o comando SQL: ' + error.message);
-    }
-
-};
-
-export async function listarProdutosSubcategoria(id) {
-    try {
-        let comando = "SELECT * FROM produto WHERE SubcategoriaProduto = ?"
-
-        let resp = await con.query(comando, [id]);
-        let linhas = resp[0];
-
-        return linhas;
-    } catch (error) {
-        throw new Error('Erro ao executar a consulta SQL: ' + error.message);
-    }
+    let comando = `
+    SELECT 
+        produto.*,
+        cardapio.nome AS nome_cardapio,
+        grupo.nome AS nome_grupo
+    FROM 
+        produto
+    JOIN 
+        cardapio ON produto.idCardapio = cardapio.id
+    JOIN 
+        grupo ON produto.idGrupo = grupo.id;
+    `;
+    let resp = await con.query(comando, []);
+    let linhas = resp.length;
+    return verificar(linhas, resp[0]);
 }
 
-export async function listarProdutoGrupo(grupo) {
-    try {
-        let comando = `SELECT * FROM produto WHERE grupoProduto = ?`;
-        let resp = await con.query(comando, [grupo]);
-        let linhas = resp[0];
-        return linhas;
-    } catch (error) {
-        throw new Error('Erro ao executar o comando SQL: ' + error.message);
-    }
+export async function buscarProduto(id) {
+    let comando = `
+    SELECT 
+        produto.*,
+        cardapio.nome AS nome_cardapio,
+        grupo.nome AS nome_grupo
+    FROM 
+        produto
+    JOIN 
+        cardapio ON produto.idCardapio = cardapio.id
+    JOIN 
+        grupo ON produto.idGrupo = grupo.id
+    WHERE 
+        produto.id = ?;
+    `;
+    let resp = await con.query(comando, [id]);
+    let linhas = resp.length;
+    return verificar(linhas, resp[0]);
+}
 
-};
+export async function buscarProdutosCardapio(id) {
+    let comando = `
+    SELECT 
+        produto.*,
+        cardapio.nome AS nome_cardapio,
+        grupo.nome AS nome_grupo
+    FROM 
+        produto
+    JOIN 
+        cardapio ON produto.idCardapio = cardapio.id
+    JOIN 
+        grupo ON produto.idGrupo = grupo.id
+    WHERE 
+        produto.idCardapio = ?;
+    `;
+    let resp = await con.query(comando, [id]);
+    let linhas = resp.length;
+    return verificar(linhas, resp[0]);
+}
 
-export async function editarProduto(id, produto) {
-    try {
-        let comando = `
-            UPDATE produto SET 
-            nomeProduto = ?, 
-            descricaoProduto = ?, 
-            valorProduto = ?, 
-            pesoProduto = ?,
-            grupoProduto = ?
-            WHERE idProduto = ?
+export async function buscarProdutosGrupo(id) {
+    let comando = `
+    SELECT 
+        produto.*,
+        cardapio.nome AS nome_cardapio,
+        grupo.nome AS nome_grupo
+    FROM 
+        produto
+    JOIN 
+        cardapio ON produto.idCardapio = cardapio.id
+    JOIN 
+        grupo ON produto.idGrupo = grupo.id
+    WHERE 
+        produto.idGrupo = ?;
+    `;
+    let resp = await con.query(comando, [id]);
+    let linhas = resp.length;
+    return verificar(linhas, resp[0]);
+}
+
+export async function editarProduto(grupo, cardapio, id, produto) {
+    let comando = `
+        UPDATE produto SET
+        nome = ?, 
+        descricao = ?, 
+        valor = ?, 
+        peso = ?,
+        idGrupo = ?,
+        idCardapio = ?
+        WHERE id = ?
         `;
-
-        let resp = await con.query(comando, [
-            produto.nomeProduto,
-            produto.descricaoProduto,
-            produto.valorProduto,
-            produto.pesoProduto,
-            produto.grupoProduto,
-            id
-        ]);
-
-        if (resp[0].affectedRows !== 1) {
-            throw new Error('Produto não encontrado ou não atualizado!');
-        }
-
-        return produto;
-    } catch (error) {
-        throw new Error('Erro ao executar o comando SQL: ' + error.message);
-    }
+    let resp = await con.query(comando, [
+        produto.nome,
+        produto.descricao,
+        produto.valor,
+        produto.peso,
+        grupo,
+        cardapio,
+        id
+    ]);
+    verificar(resp[0].affectedRows, produto);
 }
 
-
-export async function deletarProduto(id, produto) {
-    try {
-        let comando = `DELETE FROM produto WHERE idProduto = ?`;
-        let resp = await con.query(comando, [id]);
-
-        if (resp[0].affectedRows !== 1) {
-            throw new Error('Produto não DELETADO');
-        }
-        return produto;
-    } catch (error) {
-        throw new Error('Erro ao executar o comando SQL: ' + error.message);
-    }
+export async function deletarProduto(id) {
+    let comando = `DELETE FROM produto WHERE id = ?`;
+    let resp = await con.query(comando, [id]);
+    verificar(resp[0].affectedRows, "");
 }
 
-export async function alterarImagem(id, caminho) {
-    try {
-        let comando = `
-      update produto
-         set imagem = ?
-       where idProduto = ?
-    `
-  
+export async function alterarImagem(link, id, caminho) {
+    let comando = `
+            update ${link} set 
+                imagem = ?
+            where id = ?
+            `;
     let resp = await con.query(comando, [caminho, id]);
-    let info = resp[0];
-  
-    return info.affectedRows;
-    } catch (error) {
-        throw new Error('Erro ao executar o comando SQL: ' + error.message);
-    }
-    
-  }
+    let linhas = resp.affectedRows;
+    return verificar(linhas, caminho);
+}

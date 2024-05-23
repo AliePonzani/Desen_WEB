@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { MdOutlineFileDownload } from "react-icons/md";
 import { buscarDados } from '../../Service/api.service';
 
-export default function ModalProduto({ cardapio, handleClose, idProduto, tipo }) {
+export default function ModalProduto({ info, handleClose, id, tipo }) {
     const [descricao, setDescricao] = useState('');
     const [nomeProduto, setNomeProduto] = useState('');
     const [grupoEscolhido, setGrupoEscolhido] = useState("");
@@ -16,10 +16,10 @@ export default function ModalProduto({ cardapio, handleClose, idProduto, tipo })
     const [grupos, setGrupos] = useState([]);
     const [camposAlterado, setCamposAlterado] = useState(0);
     const [imagemAlterada, setImagemAlterada] = useState(0);
-    const d = cardapio;
+    const idCardapio = id;
 
     const handleChangeTextArea = (event, campo) => {
-        console.log(camposAlterado);
+        
         setCamposAlterado(camposAlterado + 1);
         const valor = event.target.value;
         if (campo === "descricao") {
@@ -64,7 +64,7 @@ export default function ModalProduto({ cardapio, handleClose, idProduto, tipo })
                 pesoProduto: pesoProduto,
                 grupoProduto: grupoEscolhido
             };
-            const resp = await axios.post(`http://127.0.0.1:5000/produto/${d}/${grupoEscolhido}`, body);
+            const resp = await axios.post(`http://127.0.0.1:5000/produto/${id}`, body);
             if (resp.status === 200) {
                 const formData = new FormData();
                 formData.append('imgProduto', arquivoImagem);
@@ -100,7 +100,7 @@ export default function ModalProduto({ cardapio, handleClose, idProduto, tipo })
                     pesoProduto: pesoProduto,
                     grupoProduto: grupoEscolhido
                 };
-                await axios.put(`http://127.0.0.1:5000/produto/${idProduto.idProduto}`, body);
+                await axios.put(`http://127.0.0.1:5000/produto/${info.idProduto}`, body);
             }
 
             if (imagemAlterada > 0) {
@@ -111,7 +111,7 @@ export default function ModalProduto({ cardapio, handleClose, idProduto, tipo })
                         'content-type': 'multipart/form-data'
                     }
                 };
-                await axios.put(`http://127.0.0.1:5000/produto/imagem/${idProduto.idProduto}`, formData, uploadConfig);
+                await axios.put(`http://127.0.0.1:5000/produto/imagem/${info.idProduto}`, formData, uploadConfig);
             }
             alert("Produto alterado com sucesso!")
             handleClose();
@@ -121,21 +121,24 @@ export default function ModalProduto({ cardapio, handleClose, idProduto, tipo })
     }
 
     useEffect(() => {
+        console.log("esta em modalProduto");
+        console.log("ModalProduto info= "+ info);
+        console.log("ModalProduto id= ", id);
         if (tipo !== "salvar") {
             async function buscarProduto() {
-                setNomeProduto(idProduto.nomeProduto)
-                setDescricao(idProduto.descricaoProduto)
-                setPesoProduto(idProduto.pesoProduto)
-                setPrecoProduto(idProduto.valorProduto)
-                setGrupoEscolhido(idProduto.grupoProduto)
-                const urlImagem = `http://127.0.0.1:5000/${idProduto.imagem}`
+                setNomeProduto(info.nomeProduto)
+                setDescricao(info.descricaoProduto)
+                setPesoProduto(info.pesoProduto)
+                setPrecoProduto(info.valorProduto)
+                setGrupoEscolhido(info.grupoProduto)
+                const urlImagem = `http://127.0.0.1:5000/${info.imagem}`
                 setImagem(urlImagem)
             }
             buscarProduto();
         }
         async function fetchData() {
             try {
-                const infoGrupos = await buscarDados(`grupo/subcategoria/${d}`);
+                const infoGrupos = await buscarDados(`grupo/subcategoria/${idCardapio}`);
                 setGrupos(infoGrupos);
 
             } catch (error) {
