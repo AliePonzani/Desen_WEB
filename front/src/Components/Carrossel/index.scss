@@ -1,54 +1,3 @@
-.carrosselPrincipal {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    width: 85%;
-    height: 80%;
-    display: flex;
-    flex-direction: column;
-    justify-content: end;
-    align-items: center;
-    padding: 20px;
-    border-radius: 18px;
-
-    .btnSelecionar {
-        display: flex;
-        width: 100%;
-        justify-content: center;
-        gap: 8px;
-    }
-
-    .displayCarrossel {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        padding: 8px;
-        align-items: end;
-        width: 100%;
-
-        h1 {
-            font-size: 8rem;
-            color: var(--cor-dourado);
-            font-family: "Allura - Regular";
-            margin-bottom: -7vh;
-        }
-
-        button {
-            display: flex;
-            gap: 16px;
-            border: none;
-            width: fit-content;
-            border-radius: 90px;
-            padding: 8px 18px;
-            font-family: "Goud Old";
-            font-size: 1.2rem;
-            align-items: center;
-        }
-    }
-
-}
-
 .carrosselFotos {
     width: 100%;
     height: 90%;
@@ -90,23 +39,40 @@
 
 .containerCards {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    width: 80%;
-    height: fit-content;
+    width: 90%;
+    position: relative;
 
     .cards {
         display: flex;
         justify-content: space-around;
-        gap: 16px;
-        width: 100%;
-        margin: 50px;
+        gap: 3vw;
+        width: 80%;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+        white-space: nowrap;
     }
 
-    button{
+    .vazio{
+        color: white;
+        font-size: larger;
+    }
+
+    button {
+        position: absolute;
+        transform: translateY(-50%);
+        cursor: pointer;
+        z-index: 1;
         background-color: transparent;
         border: none;
         font-size: 60px;
         cursor: pointer;
+        margin-left: 3vw;
+        margin-right: 3vw;
     }
+
+    .buttonPrevious {left: 0;}
+
+    .buttonNext {right: 0;}
 }

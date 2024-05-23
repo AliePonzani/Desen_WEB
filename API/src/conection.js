@@ -7,7 +7,7 @@ try {
         host: 'localhost',
         user: 'root',
         password: '',
-        database: 'artgula'
+        database: 'Loja'
     })
 
     console.log('Conexão com BD realizada');

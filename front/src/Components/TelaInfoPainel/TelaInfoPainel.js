@@ -23,6 +23,8 @@ export default function TelaInfoPainel(params) {
     const [produtos, setProdutos] = useState([]);
     const [cardapios, setCardapios] = useState({});
     const [componente, setComponente] = useState();
+    const [id, setId] = useState();
+    const [tipo, setTipo] = useState();
 
     const [open, setOpen] = useState(false);
     const handleClose = () => setOpen(false);
@@ -30,69 +32,10 @@ export default function TelaInfoPainel(params) {
     const [openDialog, setOpenDialog] = useState(false);
     const handleCloseDialog = () => setOpenDialog(false);
 
-    const [id, setId] = useState();
-    const [tipo, setTipo] = useState();
 
     const categorias = { nomeSubcategorias: ["Eventos", "Fotos"], idSubcategorias: [0, 1] };
 
     let escolha = params.titulo === "Cardápio" ? cardapios : categorias;
-
-    const deletar = async () => {
-        try {
-            const resp = await axios.delete(`http://127.0.0.1:5000/${tipo}/${id}`);
-            if (resp.status === 200) {
-                alert(`${tipo} deletado com sucesso!`);
-            }
-        } catch (error) {
-            alert(`Erro ao deletar ${tipo}` + error);
-        }
-        handleCloseDialog();
-    }
-
-    const handleOpenDialog = (id, tipo) => {
-        setId(id);
-        setTipo(tipo);
-        setOpenDialog(true);
-    };
-
-    const handleOpen = (cardapio, componente, idProduto, tipo) => {
-        const teste = React.createElement(componente, { cardapio: cardapio, handleClose: handleClose, idProduto: idProduto, tipo: tipo });
-        setComponente(teste);
-        setOpen(true);
-    };
-
-    const renderizarProdutosPorSubcategoria = (nomeSubcategoria) => {
-        if (!produtos || !Array.isArray(produtos)) {
-            return (
-                <div className='corpoTabela itens'>
-                    <p>Não há nada cadastrado ainda!</p>
-                </div>
-            );
-        }
-        const temProdutos = produtos.some(produto => produto.nomeSubcategoria === nomeSubcategoria);
-        if (!temProdutos) {
-            return (
-                <div className='corpoTabela itens'>
-                    <p>Não há nada cadastrado ainda!</p>
-                </div>
-            );
-        } else {
-            const produtosFiltrados = produtos.filter(produto => produto.nomeSubcategoria === nomeSubcategoria);
-            return produtosFiltrados.map(produto => (
-                <div className='corpoTabela itens' key={produto.idProduto}>
-                    <p>{produto.nomeProduto}</p>
-                    <p>{produto.nomeGrupo}</p>
-                    <p>{produto.valorProduto}</p>
-                    <div>
-                        <button className='editar'
-                            onClick={() => handleOpen(produto.subcategoriaProduto, ModalProduto, produto, "alterar")}
-                        ><MdEdit /> Editar</button>
-                        <button className='deletar' onClick={() => handleOpenDialog(produto.idProduto, "produto")}><MdDelete /> Deletar</button>
-                    </div>
-                </div>
-            ));
-        }
-    };
 
     useEffect(() => {
         async function fetchData() {
@@ -120,9 +63,60 @@ export default function TelaInfoPainel(params) {
         fetchData();
     }, [open, openDialog])
 
+    const deletar = async () => {
+        try {
+            const resp = await axios.delete(`http://127.0.0.1:5000/${tipo}/${id}`);
+            if (resp.status === 200) {
+                alert(`${tipo} deletado com sucesso!`);
+            }
+        } catch (error) {
+            alert(`Erro ao deletar ${tipo}` + error);
+        }
+        handleCloseDialog();
+    }
+
+    const handleOpenDialog = (id, tipo) => {
+        setId(id);
+        setTipo(tipo);
+        setOpenDialog(true);
+    };
+
+    const handleOpen = (info, componente, id, tipo) => {
+        const teste = React.createElement(componente, { info: info, handleClose: handleClose, id: id, tipo: tipo });
+        setComponente(teste);
+        setOpen(true);
+    };
+
+    const renderizarProdutosPorSubcategoria = (nomeSubcategoria) => {
+        const temProdutos = produtos.some(produto => produto.nomeSubcategoria === nomeSubcategoria);
+
+        if (!produtos || !Array.isArray(produtos) || !temProdutos) {
+            return (
+                <div className='corpoTabela itens'>
+                    <p>Não há nada cadastrado ainda!</p>
+                </div>
+            );
+        } else {
+            const produtosFiltrados = produtos.filter(produto => produto.nomeSubcategoria === nomeSubcategoria);
+            return produtosFiltrados.map(produto => (
+                <div className='corpoTabela itens' key={produto.idProduto}>
+                    <p>{produto.nomeProduto}</p>
+                    <p>{produto.nomeGrupo}</p>
+                    <p>{produto.valorProduto}</p>
+                    <div>
+                        <button className='editar'
+                            onClick={() => handleOpen(produto, ModalProduto, produto.idProduto, "editar")}
+                        ><MdEdit /> Editar</button>
+                        <button className='deletar' onClick={() => handleOpenDialog(produto.idProduto, "produto")}><MdDelete /> Deletar</button>
+                    </div>
+                </div>
+            ));
+        }
+    };
+
     if (!escolha.nomeSubcategorias || !Array.isArray(escolha.nomeSubcategorias)) {
         return (
-            <section className='telaInfo'>
+            <section className='telaInfoPainel'>
                 <h1 className='titulo'>{params.titulo}</h1>
                 <div className='tabelas'>
                     <h1>Nenhumaaaa tabela encontrada ou cadastrada</h1>
@@ -132,7 +126,7 @@ export default function TelaInfoPainel(params) {
     }
 
     return (
-        <section className='telaInfo'>
+        <section className='telaInfoPainel'>
             <Dialog
                 open={openDialog}
                 onClose={handleCloseDialog}
@@ -157,14 +151,7 @@ export default function TelaInfoPainel(params) {
                     {componente}
                 </Box>
             </Modal>
-            <h1 className='titulo'>{params.titulo}</h1>
-            <button className='addCardapio add'
-                style={{ visibility: params.titulo === "Cardápio" ? 'visible' : 'hidden' }}
-                onClick={() => handleOpen(params.titulo, ModalCardapio, null, "salvar")}
-            >
-                <FaPlus />
-                Adicionar Cardápio
-            </button>
+
             <div className='tabelas'>
                 {escolha.nomeSubcategorias.map((nomeSubcategoria, index) =>
                     <div className='tabela' key={index}>
@@ -180,11 +167,20 @@ export default function TelaInfoPainel(params) {
                                 </button>
                                 <button className='editar'
                                     style={{ visibility: params.titulo === "Cardápio" ? 'visible' : 'hidden' }}
+                                    onClick={() => handleOpen(
+                                        {
+                                            nomeSubcategoria: nomeSubcategoria,
+                                            idSubcategorias: escolha.idSubcategorias[index]
+                                        },
+                                        ModalCardapio,
+                                        escolha.idSubcategorias[index],
+                                        "editar"
+                                    )}
                                 >
                                     <MdEdit />
                                     Editar Cardápio
                                 </button>
-                                <button className='add' onClick={() => handleOpen(escolha.idSubcategorias[index], ModalProduto, null, "salvar")}><FaPlus /> Adicionar Produto</button>
+                                <button className='add' onClick={() => handleOpen(null, ModalProduto, escolha.idSubcategorias[index], "salvar")}><FaPlus /> Adicionar Produto</button>
                             </div>
                         </div>
                         <div className='cabecalhoTabela itens'>

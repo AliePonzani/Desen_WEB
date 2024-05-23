@@ -1,24 +1,35 @@
 import './index.scss';
-
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import React, { useState } from 'react';
 
 export default function CarrosselFotos(props) {
-    const galeria = props.imagens
+    const galeria = Array.isArray(props.imagens) ? props.imagens : [];
+
     const [indice, setIndice] = useState(0);
 
     const handleChange = (event, newValue) => {
         setIndice(newValue - 1);
     };
 
+    const getImagemUrl = (imagem) => {
+        const imagemCorrigida = imagem ? imagem.replace(/\\/g, '/') : '';
+        return imagemCorrigida ? `url(http://127.0.0.1:5000/${imagemCorrigida})` : '';
+    };
+
     return (
         <div className='carrosselFotos'>
             <h1>Fotos</h1>
             <div className='fotos'>
-                <div className='fotoSecundaria' style={{ backgroundImage: `url(${galeria[indice - 1]})` }}></div>
-                <div className='fotoPrincipal' style={{ backgroundImage: `url(${galeria[indice]})` }}></div>
-                <div className='fotoSecundaria' style={{ backgroundImage: `url(${galeria[indice + 1]})` }}></div>
+                <div className='fotoSecundaria'
+                    style={{ backgroundImage: getImagemUrl(props.imagens[indice-1]?.imagem) }}>
+                </div>
+                <div className='fotoPrincipal'
+                    style={{ backgroundImage: getImagemUrl(props.imagens[indice]?.imagem) }}>
+                </div>
+                <div className='fotoSecundaria'
+                    style={{ backgroundImage: getImagemUrl(props.imagens[indice + 1]?.imagem) }}>
+                </div>
             </div>
             <div className='btnSelecionar'>
                 <Stack spacing={0}>
@@ -41,5 +52,5 @@ export default function CarrosselFotos(props) {
                 </Stack>
             </div>
         </div>
-    )
+    );
 }
