@@ -16,10 +16,7 @@ export default function Cardapio() {
 
     const handleSelectItem = (item) => {
         setSelectedItem(item);
-        console.log(cardapios);
-        console.log(item);
         const cardapioEncontrado = cardapios.find(cardapio => cardapio.nome === item);
-        console.log(cardapioEncontrado);
         if (cardapioEncontrado) {
             buscarGruposDoCardapio(cardapioEncontrado.id);
         }

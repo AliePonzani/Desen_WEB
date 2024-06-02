@@ -1,3 +1,4 @@
+import { buscarImagem } from '../../API/Chamadas/chamadasProduto';
 import './index.scss';
 
 export default function CardEvento(params) {
@@ -5,7 +6,7 @@ export default function CardEvento(params) {
         <div className="cardEvento">
             <div className="image-container">
                 <img
-                    src={`http://localhost:5000/${params.teste.imagem}`}
+                    src={`${buscarImagem(params.teste.imagem)}`}
                     alt={`Card do evento ${params.teste.titulo}`}
                     className="card-image" 
                 />

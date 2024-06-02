@@ -20,8 +20,10 @@ export default function Login() {
 
     function dados(event) {
         event.preventDefault();
-        if (usuario == "teste 1" && password == "12345") {
-            navigate("/painel");
+        const user = "teste 1";
+        const senha = "12345";
+        if (usuario === user && password === senha) {
+            navigate(`/painel/${user}/${senha}`);
         } else {
             setWarning("visible");
         }
@@ -32,7 +34,7 @@ export default function Login() {
             <div className="capa">
             </div>
             <div className="campos">
-                <img src='/assets/img/logo.png'></img>
+                <img src='/assets/img/logo.png' alt="Logo da ArtGula " />
                 <div className="containerCampos">
                     <p>Bem vindo!</p>
                     <p>Esta área é exclusiva para o administrador da página.</p>
@@ -59,7 +61,7 @@ export default function Login() {
                                 )}
                             </div>
                         </div>
-                        <p><a>Esqueceu a senha?</a></p>
+                        <p><a href="./home">Esqueceu a senha?</a></p>
                         <div className="enviar"><button onClick={dados}>Login</button></div>
                     </form>
                 </div>

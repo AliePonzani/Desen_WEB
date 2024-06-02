@@ -1,5 +1,6 @@
 .telaInfoPainel {
     height: 100%;
+    overflow: hidden;
 
     ::-webkit-scrollbar {
         width: 10px;
@@ -40,6 +41,7 @@
             }
 
             .itens {
+                
                 display: flex;
                 justify-content: space-around;
                 align-items: center;
@@ -57,25 +59,28 @@
                     gap: 8px;
                 }
             }
+
+            button{
+                display: flex;
+                gap: 8px;
+                align-items: center;
+                justify-content: center;
+                background-color: var(--cor-dourado);
+                color: #ffffff;
+                border: none;
+                border-radius: 10px;
+                padding: 6px 12px;
+                cursor: pointer;
+            }
+        
+            
+            .deletar{
+                background-color: #ff0000;
+            }
         }
-
+        
     }
-
-    button{
-        display: flex;
-        gap: 8px;
-        align-items: center;
-        justify-content: center;
-        background-color: var(--cor-dourado);
-        color: white;
-        border: none;
-        border-radius: 10px;
-        padding: 6px 12px;
-        cursor: pointer;
-    }
-
-    .deletar{
-        background-color: red;
-    }
-
+    
+    
 }
+

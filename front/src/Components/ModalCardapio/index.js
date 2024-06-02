@@ -1,10 +1,10 @@
 import './index.scss';
-import axios from "axios";
 import React, { useEffect, useState } from 'react';
+import { alterar, buscarPorCardapio, deletar, salvar } from '../../API/Chamadas/chamadasProduto';
 
 export default function ModalCardapio({ info, handleClose, id, tipo }) {
-    const [cardapio, setCardapio] = useState('');
-    const [infoGrupos, setInfoGrupos] = useState();
+    const [cardapio, setCardapio] = useState(id);
+    const [infoGrupos, setInfoGrupos] = useState(info);
     const [grupo, setGrupo] = useState('');
     const [tags, setTags] = useState([]);
 
@@ -12,16 +12,14 @@ export default function ModalCardapio({ info, handleClose, id, tipo }) {
         if (tipo !== "salvar") {
             async function buscarCardapio() {
                 try {
-                    setCardapio(info.nomeSubcategoria);
-                    const resp = await axios.get(`http://127.0.0.1:5000/grupo/subcategoria/${id}`)
-                    setInfoGrupos(resp.data);
+                    setCardapio(info.nome);
+                    const resp = await buscarPorCardapio('grupo', info.id);
+                    setInfoGrupos(resp);
                     const gruposArray = []
-                    resp.data.forEach(element => {
-                        gruposArray.push(element.nomeGrupo);
+                    resp.forEach(element => {
+                        gruposArray.push(element.nome);
                     });
                     setTags(gruposArray);
-
-                    console.log(gruposArray);
 
                 } catch (error) {
                     console.log(error);
@@ -36,63 +34,73 @@ export default function ModalCardapio({ info, handleClose, id, tipo }) {
         setCardapio(event.target.value);
     };
 
-    const addGrupoAoCardapio = async (tags, idCardapio) => {
-        try {
-            for (const tag of tags) {
-                const temProdutos = infoGrupos.some(grupo => grupo.nomeGrupo === tag);
-                console.log(temProdutos);
-                if (!temProdutos) {
-                    const body = { nomeGrupo: tag };
-                    await axios.post(`http://127.0.0.1:5000/grupo/${idCardapio}`, body);
+    const salvarCardapio = async (cardapio) => {
+        if (cardapio !== null || tags !== null) {
+            try {
+                const body = { nome: cardapio };
+                const resp = await salvar('cardapio', body);
+                if (resp.status === 200) {
+                    tags.forEach(async tag => {
+                        const respGrupo = await addGrupoAoCardapio(tag, resp.data.id);
+                        console.log(respGrupo.status);
+                    });
+                    handleClose();
+                    alert(`O cardápio: ${cardapio} foi salvo com os grupos: ${tags} pertencendo a ele!`)
                 }
+            } catch (error) {
+                alert.error("Erro ao salvar o cardápio! ", error);
             }
+        } else {
+            alert("Todos os campos devem ser preenchidos e ao menos 1 grupo adicionado!")
+        }
+    }
+
+    const addGrupoAoCardapio = async (tag, idCardapio) => {
+        try {
+            const body = { nome: tag };
+            const resp = await salvar(`grupo/${idCardapio}`, body);
+            console.log("a resposta de addGrupoAoCardapio é ", resp);
+            return resp;
         } catch (error) {
             console.log(error);
         }
     }
 
-    const salvarCardapio = async (cardapio) => {
+    const alterarCardapio = async (cardapio) => {
+        console.log("o id do cardapio a ser alterado é o " + id);
+        console.log("com as tags ", infoGrupos);
         if (cardapio !== "" || tags !== null) {
             try {
-                const body = { nomeSubcategoria: cardapio };
-                const resp = await axios.post("http://127.0.0.1:5000/subcategoria/7", body);
-                if (resp.status === 200) {
-                    addGrupoAoCardapio(tags, resp.data.id);
-                    alert('Cardápio ' + cardapio + " com os grupos " + tags);
-                    handleClose();
-                }
+                const body = { nome: cardapio };
+                await alterar('cardapio', id, body);
+
+                // Identificar os grupos existentes
+                const gruposExistentes = infoGrupos.map(grupo => grupo.nome);
+
+                // Filtrar os novos grupos
+                const novosGrupos = tags.filter(tag => !gruposExistentes.includes(tag));
+
+                // Adicionar novos grupos
+                novosGrupos.forEach(async tag => {
+                    await addGrupoAoCardapio(tag, id);
+                    // console.log(respGrupo.status);
+                });
+
+                handleClose();
+                alert(`O cardápio: ${cardapio} foi alterado com os grupos: ${tags} pertencendo a ele!`);
             } catch (error) {
-                alert.error("Erro ao salvar o cardápio! ", error);
+                console.log("Erro ao salvar o cardápio! ", error);
             }
         } else {
-            alert("Todos os campos devem ser preenchidos e ao menos 1 grupo adicionado!")
+            alert("Todos os campos devem ser preenchidos e ao menos 1 grupo adicionado!");
         }
     }
 
-    const alterarCardapio = async (cardapio) => {
-        console.log("o id do cardapio a ser alterado é o "+id);
-        if (cardapio !== "" || tags !== null) {
-            try {
-                const body = { nomeSubcategoria: cardapio };
-                const resp = await axios.put(`http://127.0.0.1:5000/subcategoria/${id}`, body);
-                if (resp.status === 200) {
-                    addGrupoAoCardapio(tags, id);
-                    alert('Cardápio ' + cardapio + " com os grupos " + tags);
-                    handleClose();
-                }
-            } catch (error) {
-                alert.error("Erro ao salvar o cardápio! ", error);
-            }
-        } else {
-            alert("Todos os campos devem ser preenchidos e ao menos 1 grupo adicionado!")
-        }
-    }
 
     const excluirGrupo = async (idGrupo) => {
-        console.log("Excluindo o grupo com id " + idGrupo);
         try {
-            await axios.delete(`http://127.0.0.1:5000/grupo/${idGrupo}`)
-            console.log("Grupo excluido com sucesso" + idGrupo)
+            //inserir menssagem de confirmação
+            await deletar('grupo', idGrupo);
         } catch (error) {
             console.log(error)
         }
@@ -111,9 +119,10 @@ export default function ModalCardapio({ info, handleClose, id, tipo }) {
 
     const handleRemoveTag = (index, nomeGrupo) => {
         if (tipo !== "salvar") {
+            console.log("era pra ter em inforgrupos -> ", infoGrupos);
             infoGrupos.forEach(grupo => {
-                if (grupo.nomeGrupo === nomeGrupo) {
-                    excluirGrupo(grupo.idGrupo);
+                if (grupo.nome === nomeGrupo) {
+                    excluirGrupo(grupo.id);
                 }
             });
         }
@@ -127,9 +136,7 @@ export default function ModalCardapio({ info, handleClose, id, tipo }) {
             <div className='input_section'>
                 <label for="campoDeTexto">Nome Cardápio:</label>
                 <input id="campoDeTexto" className="input_texto" value={cardapio} onChange={handleChangeCardapioInput} onKeyDown={(event) => {
-                    // if (event.key === 'Enter') {
-                    //     handleAddTag();
-                    // }
+
                 }} />
             </div>
             <div className='input_section'>
@@ -147,7 +154,7 @@ export default function ModalCardapio({ info, handleClose, id, tipo }) {
                             }
                         }} />
                     </div>
-                    <a className='button_adcionar' onClick={handleAddTag}>+ Adicionar Grupo cardapio</a>
+                    <button className='button_adcionar' onClick={handleAddTag}>+ Adicionar Grupo cardapio</button>
                 </div>
             </div>
             <button className='button_salvar' onClick={() => { tipo === "salvar" ? salvarCardapio(cardapio) : alterarCardapio(cardapio) }}>Salvar</button>

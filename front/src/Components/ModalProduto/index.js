@@ -1,9 +1,8 @@
 import './index.scss';
-import axios from "axios";
 import React, { useEffect, useState } from 'react';
 
 import { MdOutlineFileDownload } from "react-icons/md";
-import { buscarDados } from '../../Service/api.service';
+import { alterar, alterarFoto, buscarImagem, buscarPorCardapio, salvar } from '../../API/Chamadas/chamadasProduto';
 
 export default function ModalProduto({ info, handleClose, id, tipo }) {
     const [descricao, setDescricao] = useState('');
@@ -19,7 +18,7 @@ export default function ModalProduto({ info, handleClose, id, tipo }) {
     const idCardapio = id;
 
     const handleChangeTextArea = (event, campo) => {
-        
+
         setCamposAlterado(camposAlterado + 1);
         const valor = event.target.value;
         if (campo === "descricao") {
@@ -58,23 +57,15 @@ export default function ModalProduto({ info, handleClose, id, tipo }) {
 
         try {
             const body = {
-                nomeProduto: nomeProduto,
-                descricaoProduto: descricao,
-                valorProduto: precoProduto,
-                pesoProduto: pesoProduto,
-                grupoProduto: grupoEscolhido
+                nome: nomeProduto,
+                descricao: descricao,
+                valor: precoProduto,
+                peso: pesoProduto
             };
-            const resp = await axios.post(`http://127.0.0.1:5000/produto/${id}`, body);
+            const resp = await salvar(`produto/${grupoEscolhido}/${idCardapio}`, body);
             if (resp.status === 200) {
-                const formData = new FormData();
-                formData.append('imgProduto', arquivoImagem);
-                const uploadConfig = {
-                    headers: {
-                        'content-type': 'multipart/form-data'
-                    }
-                };
-                const uploadResponse = await axios.put(`http://127.0.0.1:5000/produto/imagem/${resp.data.id}`, formData, uploadConfig);
-                if (uploadResponse.status !== 202) {
+                const uploadResponse = await alterarFoto('produto', resp.data.id, arquivoImagem);
+                if (uploadResponse !== 202) {
                     alert('Erro ao enviar a imagem');
                     return;
                 }
@@ -94,25 +85,18 @@ export default function ModalProduto({ info, handleClose, id, tipo }) {
         try {
             if (camposAlterado > 0) {
                 const body = {
-                    nomeProduto: nomeProduto,
-                    descricaoProduto: descricao,
-                    valorProduto: precoProduto,
-                    pesoProduto: pesoProduto,
-                    grupoProduto: grupoEscolhido
+                    nome: nomeProduto,
+                    descricao: descricao,
+                    valor: precoProduto,
+                    peso: pesoProduto
                 };
-                await axios.put(`http://127.0.0.1:5000/produto/${info.idProduto}`, body);
+                await alterar(`produto/${grupoEscolhido}/${idCardapio}`, info.id, body);
             }
 
             if (imagemAlterada > 0) {
-                const formData = new FormData();
-                formData.append('imgProduto', arquivoImagem);
-                const uploadConfig = {
-                    headers: {
-                        'content-type': 'multipart/form-data'
-                    }
-                };
-                await axios.put(`http://127.0.0.1:5000/produto/imagem/${info.idProduto}`, formData, uploadConfig);
+                await alterarFoto('produto', info.id, arquivoImagem);
             }
+
             alert("Produto alterado com sucesso!")
             handleClose();
         } catch (error) {
@@ -121,24 +105,21 @@ export default function ModalProduto({ info, handleClose, id, tipo }) {
     }
 
     useEffect(() => {
-        console.log("esta em modalProduto");
-        console.log("ModalProduto info= "+ info);
-        console.log("ModalProduto id= ", id);
         if (tipo !== "salvar") {
             async function buscarProduto() {
-                setNomeProduto(info.nomeProduto)
-                setDescricao(info.descricaoProduto)
-                setPesoProduto(info.pesoProduto)
-                setPrecoProduto(info.valorProduto)
-                setGrupoEscolhido(info.grupoProduto)
-                const urlImagem = `http://127.0.0.1:5000/${info.imagem}`
+                setNomeProduto(info.nome)
+                setDescricao(info.descricao)
+                setPesoProduto(info.peso)
+                setPrecoProduto(info.valor)
+                setGrupoEscolhido(info.nome_grupo)
+                const urlImagem = buscarImagem(info.imagem)
                 setImagem(urlImagem)
             }
             buscarProduto();
         }
         async function fetchData() {
             try {
-                const infoGrupos = await buscarDados(`grupo/subcategoria/${idCardapio}`);
+                const infoGrupos = await buscarPorCardapio('grupo', idCardapio);
                 setGrupos(infoGrupos);
 
             } catch (error) {
@@ -177,7 +158,7 @@ export default function ModalProduto({ info, handleClose, id, tipo }) {
                     <select id="select" class="select_grupo" onChange={(e) => handleChangeTextArea(e, "grupo")}>
                         <option value="" disabled selected hidden>{grupoEscolhido === "" ? "Selecionar Grupo" : grupoEscolhido}</option>
                         {grupos.map(grupo => (
-                            <option key={grupo.idGrupo} value={grupo.idGrupo} >{grupo.nomeGrupo}</option>
+                            <option key={grupo.id} value={grupo.id} >{grupo.nome}</option>
                         ))}
                     </select>
                 </div>
@@ -186,8 +167,9 @@ export default function ModalProduto({ info, handleClose, id, tipo }) {
                     <label htmlFor="campo_texto">Descrição:</label>
                     <textarea id="campo_texto" className="textarea-field" value={descricao} onChange={(e) => handleChangeTextArea(e, "descricao")} />
                 </div>
-                <div className='button_salvar' onClick={() => { tipo === "salvar" ? salvarProduto() : alterarProduto() }}><a>{tipo}</a></div>
-
+                <div className='button_salvar'>
+                    <button onClick={() => { tipo === "salvar" ? salvarProduto() : alterarProduto() }}>{tipo}</button>
+                </div>
             </div>
         </div>
     );

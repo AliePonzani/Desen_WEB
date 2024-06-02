@@ -118,9 +118,6 @@
             color: var(--cor-dourado);
             font-size: 4rem;
         }
-
-
-
     }
 
 
@@ -132,8 +129,6 @@
         justify-content: center;
         align-items: center;
     }
-
-
 
     .cardapios {
         display: flex;
@@ -198,7 +193,6 @@
         flex-direction: column;
         background-color: #F6CABC;
         padding: 18px 120px;
-        // gap: 36px;
 
         .logo_artgula {
             width: 30%;
@@ -279,14 +273,14 @@
 
         }
 
+        div {
+            display: flex;
+            flex-direction: row;
+            gap: 30px;
+    
+        }
     }
 
-    .avaliacao>div {
-        display: flex;
-        flex-direction: row;
-        gap: 30px;
-
-    }
 
     .rodape {
         display: flex;
