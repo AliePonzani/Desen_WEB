@@ -17,7 +17,7 @@ import CarrosselCards from '../../Components/Carrossel/cards';
 import CardEvento from '../../Components/CardEvento/CardEvento';
 import Login from '../../Components/Login/Login';
 
-import { buscarImagem, buscarPorCardapio, buscarTodos } from '../../API/Chamadas/chamadasProduto';
+import { buscarImagem, buscarPorCardapio, buscarTodos } from '../../API/chamadas';
 
 
 const style = {

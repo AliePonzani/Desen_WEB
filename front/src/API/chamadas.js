@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { API_Adress } from '../constant';
+const API_Adress = 'http://127.0.0.1:5000/'
 
 export async function salvar(caminho, body) {
     let url = API_Adress + `${caminho}/`;

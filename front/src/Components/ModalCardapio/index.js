@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import './index.scss';
 import React, { useEffect, useState } from 'react';
-import { alterar, buscarPorCardapio, deletar, salvar } from '../../API/Chamadas/chamadasProduto';
+import { alterar, buscarPorCardapio, deletar, salvar } from '../../API/chamadas';
 
 export default function ModalCardapio({ info, handleClose, id, tipo }) {
     const [cardapio, setCardapio] = useState(id);
@@ -134,7 +135,7 @@ export default function ModalCardapio({ info, handleClose, id, tipo }) {
     return (
         <div className='modal-cardapio'>
             <div className='input_section'>
-                <label for="campoDeTexto">Nome Cardápio:</label>
+                <label htmlFor="campoDeTexto">Nome Cardápio:</label>
                 <input id="campoDeTexto" className="input_texto" value={cardapio} onChange={handleChangeCardapioInput} onKeyDown={(event) => {
 
                 }} />

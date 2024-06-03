@@ -1,13 +1,11 @@
 import './index.scss';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { AiFillHome } from "react-icons/ai";
 import { MdOutlineMenuBook } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
-import TelaInfoPainel from '../../Components/TelaInfoPainel/TelaInfoPainel.js';
 import ModalCardapio from '../../Components/ModalCardapio/index.js';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import Login from '../../Components/Login/Login.js';
 import TabelasCardapio from '../../Components/TelaInfoPainel/TabelasCardapio.js';
 import Tabelaspainel from '../../Components/TelaInfoPainel/TabelasPainel.js';
 
@@ -20,10 +18,8 @@ const style = {
 
 export default function Painel() {
     const [selectedItem, setSelectedItem] = useState("Painel de Controle");
-    const [infoTela, setInfoTela] = useState([]);
     const [componente, setComponente] = useState();
     const [open, setOpen] = useState(false);
-    // const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     const handleOpen = (info, componente, id, tipo) => {
@@ -35,11 +31,6 @@ export default function Painel() {
     const handleSelectItem = (item) => {
         setSelectedItem(item);
     };
-
-
-    useEffect(() => {
-
-    }, [handleClose])
 
     return (
         <main className='telaPainel'>

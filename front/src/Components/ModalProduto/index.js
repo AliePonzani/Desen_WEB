@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import './index.scss';
 import React, { useEffect, useState } from 'react';
 
 import { MdOutlineFileDownload } from "react-icons/md";
-import { alterar, alterarFoto, buscarImagem, buscarPorCardapio, salvar } from '../../API/Chamadas/chamadasProduto';
+import { alterar, alterarFoto, buscarImagem, buscarPorCardapio, salvar } from '../../API/chamadas';
 
 export default function ModalProduto({ info, handleClose, id, tipo }) {
     const [descricao, setDescricao] = useState('');
@@ -142,20 +143,20 @@ export default function ModalProduto({ info, handleClose, id, tipo }) {
             </div>
             <div className='input_section'>
                 <div className='camposInput'>
-                    <label for="campoDeTexto1" className='input_label'>Nome Produto:</label>
+                    <label htmlFor="campoDeTexto1" className='input_label'>Nome Produto:</label>
                     <input id="campoDeTexto1" className="input_texto" value={nomeProduto} onChange={(e) => handleChangeTextArea(e, "nomeProduto")} />
                 </div>
                 <div className='camposInput'>
-                    <label for="campoDeTexto2" className='input_label'>Preço:</label>
-                    <input id="campoDeTexto2" className="input_texto" style={{ width: 120 }} value={precoProduto} onChange={(e) => handleChangeTextArea(e, "preco")} />
+                    <label htmlFor="campoDeTexto2" className='input_label'>Preço:</label>
+                    <input id="campoDeTexto2" type='number' className="input_texto" style={{ width: 120 }} value={precoProduto} onChange={(e) => handleChangeTextArea(e, "preco")} />
                 </div>
                 <div className='camposInput'>
-                    <label for="campoDeTexto3" className='input_label'>Peso/Qtd:</label>
+                    <label htmlFor="campoDeTexto3" className='input_label'>Peso/Qtd:</label>
                     <input id="campoDeTexto3" className="input_texto" style={{ width: 120 }} value={pesoProduto} onChange={(e) => handleChangeTextArea(e, "peso")} />
                 </div>
 
                 <div className='select'>
-                    <select id="select" class="select_grupo" onChange={(e) => handleChangeTextArea(e, "grupo")}>
+                    <select id="select" className="select_grupo" onChange={(e) => handleChangeTextArea(e, "grupo")}>
                         <option value="" disabled selected hidden>{grupoEscolhido === "" ? "Selecionar Grupo" : grupoEscolhido}</option>
                         {grupos.map(grupo => (
                             <option key={grupo.id} value={grupo.id} >{grupo.nome}</option>

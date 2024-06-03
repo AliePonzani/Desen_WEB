@@ -2,7 +2,7 @@ import './index.scss';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import React, { useState } from 'react';
-import { buscarImagem } from '../../API/Chamadas/chamadasProduto';
+import { buscarImagem } from '../../API/chamadas';
 
 export default function CarrosselFotos(props) {
     const galeria = Array.isArray(props.imagens) ? props.imagens : [];
