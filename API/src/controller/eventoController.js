@@ -1,7 +1,7 @@
 import multer from "multer";
 
 import { Router } from "express";
-import { editarEvento, listarEventos, salvarEvento } from "../repository/eventoRepository.js";
+import { deletarEvento, editarEvento, listarEventos, salvarEvento } from "../repository/eventoRepository.js";
 import { alterarImagem } from "../repository/produtoRepository.js";
 
 let servidor = Router();
@@ -37,7 +37,18 @@ servidor.put('/evento/:id', async (req, resp) => {
     }
 });
 
-servidor.put('/imagemevento/:link/:id', upload.single('imgEvento'), async (req, resp) => {
+servidor.delete("/evento/:id", async (req, resp) => {
+    try {
+        const id = req.params.id;
+        await deletarEvento(id);
+        resp.status(200).json("Evento deletado com sucesso!");
+    } catch (error) {
+        resp.status(500).json({ error: error.message });
+    }
+})
+
+
+servidor.put('/:link/imgEvento/:id', upload.single('imgEvento'), async (req, resp) => {
     try {
         let id = req.params.id;
         let link = req.params.link;
@@ -52,5 +63,6 @@ servidor.put('/imagemevento/:link/:id', upload.single('imgEvento'), async (req, 
         resp.status(500).json({ error: error.message });
     }
 })
+
 
 export default servidor;

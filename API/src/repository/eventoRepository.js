@@ -13,15 +13,14 @@ export async function salvarEvento(evento) {
             values (?, ?, ?, ?, ?)
         `;
 
-    let resp = await con.query(comando, [
+    let [resp] = await con.query(comando, [
         evento.titulo,
         evento.dataInicio,
         evento.dataFim,
         evento.valor,
         evento.descricao
     ]);
-    let info = resp[0].affectedRows;
-    evento.id = info.insertId;
+    evento.id = resp.insertId;
     verificar(resp, evento);
 }
 
@@ -52,4 +51,10 @@ export async function editarEvento(id, evento) {
         id
     ]);
     verificar(resp[0].affectedRows, evento);
+}
+
+export async function deletarEvento(id) {
+    let comando = `DELETE FROM evento WHERE id = ?`;
+    let resp = await con.query(comando, [id]);
+    verificar(resp[0].affectedRows, "");
 }

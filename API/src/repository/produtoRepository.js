@@ -14,7 +14,7 @@ export async function salvarProduto(grupo, cardapio, produto) {
         values (?, ?, ?, ?, ?, ?)
         `;
 
-    let resp = await con.query(comando, [
+    let [result] = await con.query(comando, [
         produto.nome,
         produto.descricao,
         produto.valor,
@@ -22,9 +22,8 @@ export async function salvarProduto(grupo, cardapio, produto) {
         grupo,
         cardapio
     ]);
-    let info = resp[0].affectedRows;
-    produto.id = info.insertId;
-    verificar(resp, produto);
+    produto.id = result.insertId;
+    verificar(result, produto);
 }
 
 export async function listarProdutos() {
@@ -142,5 +141,6 @@ export async function alterarImagem(link, id, caminho) {
             `;
     let resp = await con.query(comando, [caminho, id]);
     let linhas = resp.affectedRows;
+    console.log(verificar(linhas, caminho));
     return verificar(linhas, caminho);
 }

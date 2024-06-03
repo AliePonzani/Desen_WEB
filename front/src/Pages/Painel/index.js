@@ -1,5 +1,5 @@
 import './index.scss';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiFillHome } from "react-icons/ai";
 import { MdOutlineMenuBook } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
@@ -8,6 +8,8 @@ import ModalCardapio from '../../Components/ModalCardapio/index.js';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Login from '../../Components/Login/Login.js';
+import TabelasCardapio from '../../Components/TelaInfoPainel/TabelasCardapio.js';
+import Tabelaspainel from '../../Components/TelaInfoPainel/TabelasPainel.js';
 
 const style = {
     position: 'absolute',
@@ -19,16 +21,38 @@ const style = {
 export default function Painel() {
     const [selectedItem, setSelectedItem] = useState("Painel de Controle");
     const [infoTela, setInfoTela] = useState([]);
-    const [open, setOpen] = useState(true);
-    const handleOpen = () => setOpen(true);
+    const [componente, setComponente] = useState();
+    const [open, setOpen] = useState(false);
+    // const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const handleOpen = (info, componente, id, tipo) => {
+        const teste = React.createElement(componente, { info: info, handleClose: handleClose, id: id, tipo: tipo });
+        setComponente(teste);
+        setOpen(true);
+    };
 
     const handleSelectItem = (item) => {
         setSelectedItem(item);
     };
 
+
+    useEffect(() => {
+
+    }, [handleClose])
+
     return (
-        <main className='telaPianel'>
+        <main className='telaPainel'>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    {componente}
+                </Box>
+            </Modal>
             <section className='toolBar'>
                 <div className='logo'>
                     <img src={'/assets/img/logo circular.png'} alt="Logo da loja" width="145" height="145" />
@@ -52,12 +76,14 @@ export default function Painel() {
                 <h1 className='titulo'>{selectedItem}</h1>
                 <button className='addCardapio add'
                     style={{ visibility: selectedItem === "Cardápio" ? 'visible' : 'hidden' }}
-                    onClick={() => handleOpen(selectedItem, ModalCardapio, null, "salvar")}
+                    onClick={() => handleOpen(null, ModalCardapio, null, "salvar")}
                 >
                     <FaPlus />
                     Adicionar Cardápio
                 </button>
-                <TelaInfoPainel  />
+                {selectedItem === "Cardápio" && <TabelasCardapio/>}
+                {selectedItem === "Painel de Controle" && <Tabelaspainel/>}
+                {/* <TelaInfoPainel titulo={selectedItem} /> */}
             </section>
         </main>
     )

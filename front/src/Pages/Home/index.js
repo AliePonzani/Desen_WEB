@@ -1,23 +1,23 @@
 import './index.scss';
 
-
 import React, { useEffect, useState } from 'react';
-import { buscarDados } from '../../Service/api.service';
+import { Link } from 'react-router-dom';
+
 import { AiFillInstagram } from "react-icons/ai";
 import { IoLogoWhatsapp } from "react-icons/io";
+
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
 
-// import Box from '@mui/material/Box';
-// import Modal from '@mui/material/Modal';
-import { Link } from 'react-router-dom';
 import CarrosselFotos from '../../Components/Carrossel/fotos';
 import CardsProdutos from '../../Components/CardProdutos/CardProdutos';
 import CarrosselCards from '../../Components/Carrossel/cards';
 import CardEvento from '../../Components/CardEvento/CardEvento';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
 import Login from '../../Components/Login/Login';
+
+import { buscarImagem, buscarPorCardapio, buscarTodos } from '../../API/Chamadas/chamadasProduto';
 
 
 const style = {
@@ -47,25 +47,20 @@ export default function Home() {
 
   const handleBotaoClick = async (cardapio) => {
     setBotaoSelecionado(cardapio.nome);
-    const produtos = await buscarDados(`produto/cardapio/${cardapio.id}`)
+    const produtos = await buscarPorCardapio('produto', cardapio.id)
     setProdutos(produtos);
-  };
-
-  const getImagemUrl = (imagem) => {
-    const imagemCorrigida = imagem ? imagem.replace(/\\/g, '/') : '';
-    return imagemCorrigida ? `url(http://127.0.0.1:5000/${imagemCorrigida})` : '';
   };
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const eventos = await buscarDados("evento")
+        const eventos = await buscarTodos("evento")
         setEventos(eventos);
-        let cardapios = await buscarDados("cardapio");
+        let cardapios = await buscarTodos("cardapio");
         setCardapios(cardapios);
-        let imagens = await buscarDados("imagem/1")
+        let imagens = await buscarTodos("imagem/1")
         setImagens(imagens);
-        let carrosselPrincipal = await buscarDados("imagem/0")
+        let carrosselPrincipal = await buscarTodos("imagem/0")
         setCarrosselPrincipal(carrosselPrincipal);
         setBotaoSelecionado(cardapios[0].nome);
         handleBotaoClick(cardapios[0])
@@ -104,7 +99,7 @@ export default function Home() {
       </header>
 
       <section className='painelPrincipal'>
-        <div className='carrosselPrincipal' style={{ backgroundImage: getImagemUrl(carrosselPrincipal[index]?.imagem) }}>
+        <div className='carrosselPrincipal' style={{ backgroundImage: `url(${buscarImagem(carrosselPrincipal[index]?.imagem)})` }}>
           <div className='displayCarrossel'>
             <h1>
               {carrosselPrincipal[index]?.titulo}

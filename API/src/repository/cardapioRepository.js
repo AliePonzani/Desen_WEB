@@ -19,11 +19,9 @@ export async function salvarCardapio(cardapio) {
             values (?)
         `;
         
-
-    let resp = await con.query(comando, [cardapio.nome]);
-    let info = resp[0].affectedRows;
-    cardapio.id = info.insertId;
-    verificar(resp, cardapio);
+    let [result] = await con.query(comando, [cardapio.nome]);
+    cardapio.id = result.insertId;
+    verificar(result, cardapio);
 }
 
 
@@ -51,7 +49,7 @@ export async function editarCardapio(id, cardapio) {
         cardapio.nome,
         id
     ]);
-    verificar(resp[0].affectedRows, cardapio);
+    verificar(resp, cardapio);
 }
 
 export async function deletarCardapio(id) {
