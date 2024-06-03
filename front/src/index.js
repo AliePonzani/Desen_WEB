@@ -7,7 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from './Pages/Home/index.js';
 import Cardapio from './Pages/Cardapio/index.js';
 import Painel from './Pages/Painel/index.js';
-import notFound from './Pages/notFound/index.js';
+import NotFound from './Pages/NotFound/index.js';
 
 const user = "teste 1";
 const senha = "12345";
@@ -20,7 +20,7 @@ root.render(
         <Route path='/' element={<Home />} />
         <Route path={`/painel/${user}/${senha}`} element={<Painel/>}/>
         <Route path='/cardapio/:cardapio' element={<Cardapio />} />
-        <Route path='*' element={<notFound />} />
+        <Route path='*' element={<NotFound />} />
         
       </Routes>
     </BrowserRouter>
