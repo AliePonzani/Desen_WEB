@@ -4,15 +4,17 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
+import axios from 'axios'
 
 export default function Login() {
-    const [usuario, setUsusario] = useState("");
+
+    const [usuario, setUsuario] = useState("");
     const [password, setPassword] = useState("");
     const [warning, setWarning] = useState("hidden");
     const [mostrarSenha, setMostrarSenha] = useState(false);
     const navigate = useNavigate();
 
-    const handleUsuarioChange = (event) => setUsusario(event.target.value);
+    const handleUsuarioChange = (event) => setUsuario(event.target.value);
     const handlePasswordChange = (event) => setPassword(event.target.value);
     const toggleMostrarSenha = () => {
         setMostrarSenha(!mostrarSenha);
@@ -20,13 +22,20 @@ export default function Login() {
 
     function dados(event) {
         event.preventDefault();
-        const user = "teste 1";
-        const senha = "12345";
-        if (usuario === user && password === senha) {
-            navigate(`/painel/${user}/${senha}`);
-        } else {
+        axios.post('http://localhost:5000/login',{user: usuario, senha: password}).then(response =>{
+            if (response.status === 200) {
+                navigate(`/painel/${usuario}/${password}`);
+            }else{
+                setWarning("visible")
+            }
+        })
+        .catch(error => {
+            console.error('erro no login', error);
             setWarning("visible");
-        }
+
+        });
+
+        
     }
 
     return (

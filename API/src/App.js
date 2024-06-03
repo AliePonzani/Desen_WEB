@@ -7,6 +7,7 @@ import grupoController from "./controller/grupoController.js";
 import produtoController from "../src/controller/produtoController.js"
 import eventoController from "../src/controller/eventoController.js";
 import imagemController from "../src/controller/imagemController.js";
+import loginController from "../src/controller/loginController.js"
 
 const servidor = express();
 servidor.use(cors());
@@ -18,6 +19,7 @@ servidor.use(grupoController);
 servidor.use(produtoController);
 servidor.use(eventoController);
 servidor.use(imagemController);
+servidor.use(loginController);
 
 servidor.use('/storage/evento', express.static('storage/evento'));
 servidor.use('/storage/produto', express.static('storage/produto'));
