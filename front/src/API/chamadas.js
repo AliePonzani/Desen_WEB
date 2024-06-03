@@ -17,7 +17,6 @@ export async function alterar(caminho, id, body) {
 export async function alterarFoto(caminho, id, arquivoImagem) {
     let tipo = caminho === 'produto' ? 'imgProduto' : caminho === 'evento' ? 'imgEvento' : 'imgCarrossel';
     let url = API_Adress + `${caminho}/${tipo}/${id}`
-    console.log(url);
     const formData = new FormData();
     formData.append(tipo, arquivoImagem);
     const uploadConfig = {
