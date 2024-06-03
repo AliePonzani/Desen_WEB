@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import './index.scss';
 import React, { useEffect, useState } from 'react';
 
 import { MdOutlineFileDownload } from "react-icons/md";
-import { salvar, alterarFoto } from '../../API/Chamadas/chamadasProduto';
+import { salvar, alterarFoto, buscarImagem, alterar } from '../../API/chamadas';
 
 export default function ModalEvento({ info, handleClose, tipo }) {
     const [imagem, setImagem] = useState(null);
@@ -37,8 +38,18 @@ export default function ModalEvento({ info, handleClose, tipo }) {
         }
     };
 
-    const converterDataeHora = (data) => {
-        
+    const converterDataeHora = (dataHora) => {
+        const data = new Date(dataHora);
+        const dia = String(data.getDate()).padStart(2, '0');
+        const mes = String(data.getMonth() + 1).padStart(2, '0');
+        const ano = data.getFullYear();
+
+        const hora = String(data.getHours()).padStart(2, '0');
+        const minutos = String(data.getMinutes()).padStart(2, '0');
+
+        const teste = [`${ano}-${mes}-${dia}`, `${hora}:${minutos}`]
+
+        return teste;
     }
 
     const combineDateTime = (date, time) => {
@@ -83,7 +94,7 @@ export default function ModalEvento({ info, handleClose, tipo }) {
                 if (uploadResponse !== 202) {
                     alert('Erro ao enviar a imagem');
                     return;
-                }else{
+                } else {
                     alert('Evento ' + tituloEvento + " adicionado com sucesso!");
                     handleClose();
                 }
@@ -94,13 +105,48 @@ export default function ModalEvento({ info, handleClose, tipo }) {
         }
     }
 
-    const alterarEvento = () => { }
+    const alterarEvento = async () => { 
+        if (!tituloEvento || !descricao || !date1 || !date2 || !time1 || !time2 || !imagem) {
+            alert("Todos os campos devem ser preenchidos");
+            return;
+        }
+        try {
+            if (camposAlterado > 0) {
+                const body = {
+                    titulo: tituloEvento,
+                    dataInicio: combineDateTime(date1, time1),
+                    dataFim: combineDateTime(date2, time2),
+                    valor: precoEvento,
+                    descricao: descricao,
+                }
+                await alterar('evento', info.id, body);
+
+                if (imagemAlterada > 0) {
+                    await alterarFoto("evento", info.id, arquivoImagem);
+                }
+
+                alert("Evento alterado com sucesso!");
+                handleClose();
+            }
+        } catch (error) {
+            alert("Erro ao alterar evento" + error);
+        }
+    }
 
     useEffect(() => {
         if (tipo !== "salvar") {
             console.log(info);
-            setTituloEvento(info.titulo)
-            
+            const dataInicio = converterDataeHora(info.dataInicio);
+            const dataFim = converterDataeHora(info.dataFim);
+            setTituloEvento(info.titulo);
+            setDate1(dataInicio[0]);
+            setTime1(dataInicio[1]);
+            setDate2(dataFim[0]);
+            setTime2(dataFim[1]);
+            setPrecoEvento(info.valor);
+            setDescricao(info.descricao);
+            const urlImagem = buscarImagem(info.imagem)
+            setImagem(urlImagem);
         }
     }, [])
 

@@ -51,9 +51,9 @@ servidor.get('/produto/grupo/:id', async (req, resp) => {
     try {
         let id = req.params.id;
         let produtos = await buscarProdutosGrupo(id);
-        if (produtos.length < 1) {
-            throw new Error("Nenhum produto encontrado!");
-        }
+        // if (produtos.length < 1) {
+        //     throw new Error("Nenhum produto encontrado!");
+        // }
         resp.status(200).json(produtos);
     } catch (error) {
         resp.status(500).json({ error: error.message });

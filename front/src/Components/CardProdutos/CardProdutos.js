@@ -1,4 +1,4 @@
-import { buscarImagem } from '../../API/Chamadas/chamadasProduto';
+import { buscarImagem } from '../../API/chamadas';
 import './index.scss';
 
 export default function CardsProdutos(params) {

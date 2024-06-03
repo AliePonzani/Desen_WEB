@@ -141,6 +141,5 @@ export async function alterarImagem(link, id, caminho) {
             `;
     let resp = await con.query(comando, [caminho, id]);
     let linhas = resp.affectedRows;
-    console.log(verificar(linhas, caminho));
     return verificar(linhas, caminho);
 }

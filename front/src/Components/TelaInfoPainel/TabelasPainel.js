@@ -1,6 +1,6 @@
 import './index.scss';
 import React, { useEffect, useState } from "react";
-import { buscarTodos, deletar } from "../../API/Chamadas/chamadasProduto";
+import { buscarTodos, deletar } from "../../API/chamadas";
 import { format } from "date-fns";
 import ModalEvento from "../ModalEvento";
 import { FaPlus } from "react-icons/fa6";
@@ -130,7 +130,7 @@ export default function Tabelaspainel() {
                                 {eventos.map((evento, index) =>
                                     <div className='corpoTabela itens' key={index}>
                                         <p>{evento.titulo}</p>
-                                        <p>{formatDate(evento.dataInicio)}</p>
+                                        <p>{formatDate(evento.dataInicio)} até {formatDate(evento.dataFim)}</p>
                                         <p>{formatTime(evento.dataInicio)} ás {formatTime(evento.dataFim)}</p>
                                         <div>
                                             <button className='editar'

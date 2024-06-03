@@ -1,6 +1,6 @@
 import './index.scss';
 import React, { useEffect, useState } from "react";
-import { buscarPorCardapio, buscarTodos } from "../../API/Chamadas/chamadasProduto";
+import { buscarPorCardapio, buscarTodos } from "../../API/chamadas";
 import { Box, Dialog, DialogActions, DialogTitle, Modal } from "@mui/material";
 import { MdDelete, MdEdit } from "react-icons/md";
 import axios from "axios";

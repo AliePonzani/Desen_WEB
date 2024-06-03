@@ -20,31 +20,31 @@
         padding: 0 32px;
         justify-content: space-between;
         align-items: center;
-    }
 
-    a {
-        text-decoration: none;
-        color: var(--cor-cinza-texto);
-        font-family: "Goud Old";
-        font-size: 18px;
-        align-content: center;
-    }
+        .menu {
+            display: flex;
+            gap: 16px;
 
-    .menu {
-        display: flex;
-        gap: 16px;
-        color: var(--cor-cinza-texto);
-    }
+            a, #basic-button {
+                text-decoration: none;
+                color: var(--cor-cinza-texto);
+                font-family: "Goud Old";
+                font-size: 18px;
+                align-content: center;
+            }
+        }
 
-    .logo {
-        align-content: center;
-        text-align: center;
-        height: 90px;
-        width: 90px;
-    }
+        .logo {
+            align-content: center;
+            text-align: center;
+            height: 90px;
+            width: 90px;
 
-    .logo img{
-        height: 105%;
+            img{
+                height: 105%;
+            }
+        }
+    
     }
 
     .moldurasuperior, .moldurainferior{
@@ -58,16 +58,17 @@
     .moldurainferior {     
         transform: scaleY(-1);
         position: relative;
+        
+        h1{
+            transform: scaleY(-1);
+            height: 10%;
+            font-family: "Goud Old";
+            font-size: 1.5em;
+            margin-top: 20px;
+            color: var(--cor-cinza-texto);
+        }
     }
 
-    .moldurainferior h1{
-        transform: scaleY(-1);
-        height: 10%;
-        font-family: "Goud Old";
-        font-size: 1.5em;
-        margin-top: 20px;
-        color: var(--cor-cinza-texto);
-    }
 
     .moldura {
         height: 310px;
@@ -126,7 +127,6 @@
             display: flex;
             flex-direction: column;
             gap: 0.5vw;
-            border: 1px solid;
         }
         
         .cabecalho {

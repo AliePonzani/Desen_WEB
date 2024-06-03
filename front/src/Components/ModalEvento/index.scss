@@ -73,19 +73,18 @@
   }
 
   .button_salvar {
+    width: 100%;
     display: flex;
     justify-content: flex-end;
-    a {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 98px;
-      height: 31px;
-      padding: 2px 10px;
-      font-size: 16px;
-      color: #ffffff;
+
+    button {
+      padding: 3%;
+      text-transform: uppercase;
       background-color: #ff9e87;
+      color: #ffffff;
+      border: none;
       border-radius: 5px;
     }
+    
   }
 }
