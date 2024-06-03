@@ -42,12 +42,3 @@ create table Evento(
     descricao varchar(500),
     imagem varchar(255)
 );
-
-{
-  "tituloEvento":"Evento_08",
-  "dataInicial":"2022-02-02",
-  "dataFinal":"2022-02-02",
-  "horaInicio":"12:00:00",
-  "horaFim":"12:00:00",
-  "descricaoEvento":"Teste evento"
-}
