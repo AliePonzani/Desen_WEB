@@ -1,13 +1,12 @@
+import 'dotenv/config'
+import express from 'express'
+import cors from 'cors'
+
 import cardapioController from "./controller/cardapioController.js";
 import grupoController from "./controller/grupoController.js";
 import produtoController from "../src/controller/produtoController.js"
 import eventoController from "../src/controller/eventoController.js";
 import imagemController from "../src/controller/imagemController.js";
-
-
-import 'dotenv/config'
-import express from 'express'
-import cors from 'cors'
 
 const servidor = express();
 servidor.use(cors());
