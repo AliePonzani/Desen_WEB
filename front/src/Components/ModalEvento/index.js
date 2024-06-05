@@ -120,14 +120,12 @@ export default function ModalEvento({ info, handleClose, tipo }) {
                     descricao: descricao,
                 }
                 await alterar('evento', info.id, body);
-
-                if (imagemAlterada > 0) {
-                    await alterarFoto("evento", info.id, arquivoImagem);
-                }
-
-                alert("Evento alterado com sucesso!");
-                handleClose();
             }
+            if (imagemAlterada > 0) {
+                await alterarFoto("evento", info.id, arquivoImagem);
+            }
+            alert("Evento alterado com sucesso!");
+            handleClose();
         } catch (error) {
             alert("Erro ao alterar evento" + error);
         }

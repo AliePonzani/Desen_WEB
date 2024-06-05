@@ -90,7 +90,6 @@ export default function ModalImagem({ info, handleClose, tipo }) {
 
     useEffect(() => {
         if (tipo !== "salvar") {
-            console.log(info);
             setTituloFoto(info.titulo);
             setGrupo(info.carrossel === 1 ? "Fotos" : "Carrosel");
             const urlImagem = buscarImagem(info.imagem)

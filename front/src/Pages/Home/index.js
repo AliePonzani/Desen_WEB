@@ -104,8 +104,8 @@ export default function Home() {
             <h1>
               {carrosselPrincipal[index]?.titulo}
             </h1>
-            <button style={{ backgroundColor: "#a97f2c", color: "#f6cabc" }}>Faça seu pedido <IoLogoWhatsapp fontSize="2rem" /></button>
-            <button style={{ backgroundColor: "#f6cabc", color: "#a97f2c" }}>Siga a gente <AiFillInstagram fontSize="2rem" /></button>
+            <a style={{ backgroundColor: "#a97f2c", color: "#f6cabc" }} alt="Link para WhatsApp da loja" href="https://wa.me/+5511958655550">Faça seu pedido <IoLogoWhatsapp fontSize="2rem" /></a>
+            <a style={{ backgroundColor: "#f6cabc", color: "#a97f2c" }} alt="Link para Instagram da loja" href="https://www.instagram.com/art.gula/reels/">Siga a gente <AiFillInstagram fontSize="2rem" /></a>
           </div>
           <div className='btnSelecionar'>
             <Stack spacing={0}>
@@ -218,7 +218,7 @@ export default function Home() {
 
         <div className='item_rodape'>
           <div >
-            <h4>Produtos</h4>
+            <h4>Cardápios</h4>
             <ul>
               {cardapios.map((cardapio, index) => (
                 <li key={index}>
@@ -229,7 +229,7 @@ export default function Home() {
           </div>
 
           <div >
-            <h4>local</h4>
+            <h4>Informações</h4>
             <ul>
               <li><a href='#sobre'>Sobre a gente</a></li>
               <li><a href='https://www.ifood.com.br/delivery/sao-paulo-sp/art--gula-doceria-indianopolis/6e026fd8-8268-493d-bd1b-6f0daa6aa6b2?utm_medium=share'>iFood</a></li>

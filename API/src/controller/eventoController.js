@@ -48,7 +48,7 @@ servidor.delete("/evento/:id", async (req, resp) => {
 })
 
 
-servidor.put('/:link/imgEvento/:id', upload.single('imgEvento'), async (req, resp) => {
+servidor.put('/imgEvento/:link/:id', upload.single('imgEvento'), async (req, resp) => {
     try {
         let id = req.params.id;
         let link = req.params.link;

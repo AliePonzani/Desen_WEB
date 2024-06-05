@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_Adress = 'http://localhost:5000/'
+const API_Adress = 'http://20.195.170.24:5000/'
 
 export async function salvar(caminho, body) {
     let url = API_Adress + `${caminho}/`;
@@ -10,13 +10,14 @@ export async function salvar(caminho, body) {
 
 export async function alterar(caminho, id, body) {
     let url = API_Adress + `${caminho}/${id}`;
+    console.log(url);
     let resp = await axios.put(url, body);
     return resp.data;
 }
 
 export async function alterarFoto(caminho, id, arquivoImagem) {
     let tipo = caminho === 'produto' ? 'imgProduto' : caminho === 'evento' ? 'imgEvento' : 'imgCarrossel';
-    let url = API_Adress + `${caminho}/${tipo}/${id}`
+    let url = API_Adress + `${tipo}/${caminho}/${id}`
     const formData = new FormData();
     formData.append(tipo, arquivoImagem);
     const uploadConfig = {

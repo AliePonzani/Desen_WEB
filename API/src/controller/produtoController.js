@@ -74,20 +74,19 @@ servidor.get('/produto/cardapio/:id', async (req, resp) => {
     }
 });
 
-servidor.put('/produto/:grupo/:cardapio/:id', async (req, resp) => {
+servidor.put('/produto/:cardapio/:id', async (req, resp) => {
     try {
         const id = req.params.id;
-        let grupo = req.params.grupo;
         let cardapio = req.params.cardapio;
         const produto = req.body;
-        await editarProduto(grupo, cardapio, id, produto);
+        await editarProduto(cardapio, id, produto);
         resp.status(200).json(produto);
     } catch (error) {
         resp.status(500).json({ error: error.message });
     }
 });
 
-servidor.put('/:link/imgProduto/:id', upload.single('imgProduto'), async (req, resp) => {
+servidor.put('/imgProduto/:link/:id', upload.single('imgProduto'), async (req, resp) => {
     try {
         let id = req.params.id;
         let link = req.params.link;

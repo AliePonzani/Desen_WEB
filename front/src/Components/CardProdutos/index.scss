@@ -28,11 +28,21 @@
     .text-container {
         padding-top: 10px;
         text-align: center;
-    }
 
-    .product-title,
-    .product-price {
-        margin: 0;
+        p{
+            font-family: "Goudy Old Style";
+            font-size: 1.3rem; 
+        }
+
+        .product-title{
+            color: var(--cor-dourado);
+        }
+
+        .product-price{
+            color: var(--cor-cinza-texto);
+            font-weight: bold;
+        }
+
     }
 
 }

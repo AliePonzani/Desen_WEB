@@ -104,7 +104,7 @@ export async function buscarProdutosGrupo(id) {
     return verificar(linhas, resp[0]);
 }
 
-export async function editarProduto(grupo, cardapio, id, produto) {
+export async function editarProduto(cardapio, id, produto) {
     let comando = `
         UPDATE produto SET
         nome = ?, 
@@ -120,7 +120,7 @@ export async function editarProduto(grupo, cardapio, id, produto) {
         produto.descricao,
         produto.valor,
         produto.peso,
-        grupo,
+        produto.grupo,
         cardapio,
         id
     ]);
@@ -134,11 +134,7 @@ export async function deletarProduto(id) {
 }
 
 export async function alterarImagem(link, id, caminho) {
-    let comando = `
-            update ${link} set 
-                imagem = ?
-            where id = ?
-            `;
+    let comando = `update ${link} set imagem = ? where id = ?;`
     let resp = await con.query(comando, [caminho, id]);
     let linhas = resp.affectedRows;
     return verificar(linhas, caminho);

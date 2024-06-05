@@ -22,7 +22,7 @@ export default function Login() {
 
     function dados(event) {
         event.preventDefault();
-        axios.post('http://localhost:5000/login',{user: usuario, senha: password}).then(response =>{
+        axios.post('http://20.195.170.24:5000/login',{user: usuario, senha: password}).then(response =>{
             if (response.status === 200) {
                 navigate(`/painel/${usuario}/${password}`);
             }else{
@@ -34,7 +34,6 @@ export default function Login() {
             setWarning("visible");
 
         });
-   
     }
 
     return (

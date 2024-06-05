@@ -49,7 +49,7 @@ servidor.put('/imagem/:id', async (req, resp) => {
     }
 });
 
-servidor.put('/:link/imgCarrossel/:id', upload.single('imgCarrossel'), async (req, resp) => {
+servidor.put('/imgCarrossel/:link/:id', upload.single('imgCarrossel'), async (req, resp) => {
     try {
         let id = req.params.id;
         let link = req.params.link;
