@@ -8,7 +8,7 @@ import { alterar, alterarFoto, buscarImagem, buscarPorCardapio, salvar } from '.
 export default function ModalProduto({ info, handleClose, id, tipo }) {
     const [descricao, setDescricao] = useState('');
     const [nomeProduto, setNomeProduto] = useState('');
-    const [grupoEscolhido, setGrupoEscolhido] = useState("");
+    const [grupoEscolhido, setGrupoEscolhido] = useState({});
     const [precoProduto, setPrecoProduto] = useState('');
     const [pesoProduto, setPesoProduto] = useState('');
     const [arquivoImagem, setArquivoImagem] = useState(null);
@@ -27,6 +27,7 @@ export default function ModalProduto({ info, handleClose, id, tipo }) {
         } else if (campo === "nomeProduto") {
             setNomeProduto(valor);
         } else if (campo === "grupo") {
+            console.log(valor);
             setGrupoEscolhido(valor);
         } else if (campo === "peso") {
             setPesoProduto(valor);
@@ -63,7 +64,7 @@ export default function ModalProduto({ info, handleClose, id, tipo }) {
                 valor: precoProduto,
                 peso: pesoProduto
             };
-            const resp = await salvar(`produto/${grupoEscolhido}/${idCardapio}`, body);
+            const resp = await salvar(`produto/${grupoEscolhido.id}/${idCardapio}`, body);
             if (resp.status === 200) {
                 const uploadResponse = await alterarFoto('produto', resp.data.id, arquivoImagem);
                 if (uploadResponse !== 202) {
@@ -89,9 +90,11 @@ export default function ModalProduto({ info, handleClose, id, tipo }) {
                     nome: nomeProduto,
                     descricao: descricao,
                     valor: precoProduto,
-                    peso: pesoProduto
+                    peso: pesoProduto,
+                    grupo: grupoEscolhido.id
                 };
-                await alterar(`produto/${grupoEscolhido}/${idCardapio}`, info.id, body);
+                console.log(body);
+                await alterar(`produto/${idCardapio}`, info.id, body);
             }
 
             if (imagemAlterada > 0) {
@@ -106,13 +109,14 @@ export default function ModalProduto({ info, handleClose, id, tipo }) {
     }
 
     useEffect(() => {
+        console.log(grupoEscolhido);
         if (tipo !== "salvar") {
             async function buscarProduto() {
                 setNomeProduto(info.nome)
                 setDescricao(info.descricao)
                 setPesoProduto(info.peso)
                 setPrecoProduto(info.valor)
-                setGrupoEscolhido(info.nome_grupo)
+                setGrupoEscolhido({nome: info.nome_grupo, id: info.idGrupo})
                 const urlImagem = buscarImagem(info.imagem)
                 setImagem(urlImagem)
             }
@@ -157,7 +161,7 @@ export default function ModalProduto({ info, handleClose, id, tipo }) {
 
                 <div className='select'>
                     <select id="select" className="select_grupo" onChange={(e) => handleChangeTextArea(e, "grupo")}>
-                        <option value="" disabled selected hidden>{grupoEscolhido === "" ? "Selecionar Grupo" : grupoEscolhido}</option>
+                        <option value="" disabled selected hidden>{Object.keys(grupoEscolhido).length === 0 ? "Selecionar Grupo" : grupoEscolhido.nome}</option>
                         {grupos.map(grupo => (
                             <option key={grupo.id} value={grupo.id} >{grupo.nome}</option>
                         ))}

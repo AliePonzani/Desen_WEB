@@ -26,14 +26,14 @@ create table produto(
     FOREIGN KEY (idGrupo) REFERENCES grupo(id)
 );
 
-create table Imagem(
+create table imagem(
     id int auto_increment primary key,
     titulo varchar(20),
     imagem varchar(255),
     carrossel int not null
 );
 
-create table Evento(
+create table evento(
     id int auto_increment primary key,
     titulo varchar(50) not null,
     dataInicio datetime,

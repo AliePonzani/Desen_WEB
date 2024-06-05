@@ -13,8 +13,8 @@ export default function CardsProdutos(params) {
             </div>
             <div className="text-container">
                 <p className="product-title">{params.teste.nome}</p>
-                <p className="product-title">{params.teste.descricao}</p>
-                <p className="product-price">{params.teste.valor}</p>
+                <p className="product-title">{params.teste.peso}</p>
+                <p className="product-price">R${params.teste.valor}</p>
             </div>
         </div>
     );

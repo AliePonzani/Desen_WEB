@@ -8,7 +8,7 @@
         padding: 0 32px;
         justify-content: space-between;
         align-items: center;
-        font-family: "Goud Old";
+        font-family: "Goudy Old Style";
         font-size: 18px;
 
         a {
@@ -90,16 +90,17 @@
                 margin-bottom: -5vh;
             }
 
-            button {
+            a {
                 display: flex;
                 gap: 16px;
                 border: none;
                 width: fit-content;
                 border-radius: 90px;
                 padding: 8px 18px;
-                font-family: "Goud Old";
+                font-family: "Goudy Old Style";
                 font-size: 1.2rem;
                 align-items: center;
+                text-decoration: none;
             }
         }
     }
@@ -140,7 +141,7 @@
             flex-direction: column;
             gap: 2vw;
             width: 85%;
-            font-family: "Goud Old";
+            font-family: "Goudy Old Style";
             font-size: 24px;
             color: var(--cor-dourado);
             text-align: center;
@@ -163,7 +164,7 @@
                     border-radius: 90px;
                     width: 100%;
                     padding: 12px 0;
-                    font-family: "Goud Old";
+                    font-family: "Goudy Old Style";
                     color: var(--cor-dourado);
                     font-size: 24px;
                     text-transform: uppercase;

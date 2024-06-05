@@ -1,160 +1,162 @@
 .bodyPrincipal {
-    color: var(--cor-dourado);
+  color: var(--cor-dourado);
+
+  h1 {
+    font-family: "Harrigton";
+    font-weight: 100;
+    text-align: center;
+  }
+
+  .bodyCardapio {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  header {
+    display: flex;
+    padding: 0 32px;
+    justify-content: space-between;
+    align-items: center;
+
+    .menu {
+      display: flex;
+      gap: 16px;
+
+      a,
+      #basic-button {
+        text-decoration: none;
+        color: var(--cor-cinza-texto);
+        font-family: "Goudy Old Style";
+        font-size: 18px;
+        align-content: center;
+      }
+    }
+
+    .logo {
+      align-content: center;
+      text-align: center;
+      height: 90px;
+      width: 90px;
+
+      img {
+        height: 105%;
+      }
+    }
+  }
+
+  .moldurasuperior,
+  .moldurainferior {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    position: absolute;
+    font-size: 1em;
+  }
+
+  .moldurainferior {
+    transform: scaleY(-1);
+    position: relative;
 
     h1 {
-        font-family: "Harrigton";
-        font-weight: 100;
-        text-align: center;
+      transform: scaleY(-1);
+      height: 10%;
+      font-family: "Goudy Old Style";
+      font-size: 1.5em;
+      margin-top: 20px;
+      color: var(--cor-cinza-texto);
+    }
+  }
+
+  .moldura {
+    height: 310px;
+    margin-top: 20px;
+  }
+
+  .molduradireita {
+    transform: scaleX(-1);
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    width: 85%;
+    margin-top: 50px;
+
+    .cabecalho-Grupo {
+      text-align: center;
+      font-size: 40px;
+      margin-top: 50px;
     }
 
-    .bodyCardapio {
-        width: 100%;
-        height: 100%;
+    .cabecalho-Grupo h1 {
+      margin: 0;
+    }
+
+    .cabecalho-Grupo p {
+      margin: 0;
+      font-family: "Goudy Old Style";
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .imagens {
+      display: flex;
+      justify-content: space-around;
+      padding: 50px 0;
+
+      .imagem {
+        width: 150px;
+        height: 150px;
+        border-radius: 16px;
         display: flex;
-        flex-direction: column;
         align-items: center;
-    }
-
-    header {
-        display: flex;
-        padding: 0 32px;
-        justify-content: space-between;
-        align-items: center;
-
-        .menu {
-            display: flex;
-            gap: 16px;
-
-            a, #basic-button {
-                text-decoration: none;
-                color: var(--cor-cinza-texto);
-                font-family: "Goud Old";
-                font-size: 18px;
-                align-content: center;
-            }
-        }
-
-        .logo {
-            align-content: center;
-            text-align: center;
-            height: 90px;
-            width: 90px;
-
-            img{
-                height: 105%;
-            }
-        }
-    
-    }
-
-    .moldurasuperior, .moldurainferior{
-        display: flex;
-        justify-content: space-between;
-        width: 90%;
-        position: absolute;
-        font-size: 1em;
-    }
-
-    .moldurainferior {     
-        transform: scaleY(-1);
+        justify-content: center;
+        overflow: hidden;
         position: relative;
-        
-        h1{
-            transform: scaleY(-1);
-            height: 10%;
-            font-family: "Goud Old";
-            font-size: 1.5em;
-            margin-top: 20px;
-            color: var(--cor-cinza-texto);
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
         }
+      }
     }
 
-
-    .moldura {
-        height: 310px;
-        margin-top: 20px;
+    .produtos {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5vw;
     }
 
-    .molduradireita {
-        transform: scaleX(-1);
+    .cabecalho {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 22px;
+      font-weight: bold;
     }
 
-    .container {
-        display: flex;
-        flex-direction: column;
-        width: 85%;
-        margin-top: 50px;
-        
-
-        .cabecalho-Grupo {
-            text-align: center;
-            font-size: 40px;
-            margin-top: 50px;
-        }
-    
-        .cabecalho-Grupo h1{
-            margin: 0;
-        }
-    
-        .cabecalho-Grupo p {
-            margin: 0;
-            font-family: "Goud Old";
-            font-weight: bold;
-            font-size: 18px;
-        }
-    
-        .imagens {
-            display: flex;
-            justify-content: space-around;
-            padding: 50px 0;
-
-            .imagem {
-                width: 150px;
-                height: 150px;
-                border-radius: 16px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                overflow: hidden;
-            
-                img{
-                    width: 100%;
-                }                
-            }
-        }
-        
-        .produtos {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5vw;
-        }
-        
-        .cabecalho {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 22px;
-            font-weight: bold;
-        }
-        
-        .cabecalho h3 {
-            font-family: "Playfair";
-            margin: 0;
-        }
-    
-        .produto{
-            border-bottom: 1px solid #a97f2c3d;
-        }
-    
-        .produtos p {
-            color: var(--cor-cinza-texto);
-            margin: 0;
-            font-family: "Gould Old";
-        }
-    
-        .descricao {
-            font-size: 1em;
-        }
+    .cabecalho h3 {
+      font-family: "Playfair";
+      margin: 0;
     }
 
+    .produto {
+      border-bottom: 1px solid #a97f2c3d;
+    }
+
+    .produtos p {
+      color: var(--cor-cinza-texto);
+      margin: 0;
+      font-family: "Gould Old";
+    }
+
+    .descricao {
+      font-size: 1em;
+    }
+  }
 }

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { buscarTodos, deletar } from "../../API/chamadas";
 import { format } from "date-fns";
 import ModalEvento from "../ModalEvento";
+import ModalImagem from '../ModalImagem';
 import { FaPlus } from "react-icons/fa6";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { Box, Dialog, DialogActions, DialogTitle, Modal } from "@mui/material";
@@ -148,8 +149,7 @@ export default function Tabelaspainel() {
                     <div className='tituloTabela'>
                         <h1>Fotos</h1>
                         <div className='botoesTituloTabela'>
-
-                            <button className='add' onClick={() => handleOpen(null, ModalEvento, eventos, "salvar")}><FaPlus /> Adicionar Foto</button>
+                            <button className='add' onClick={() => handleOpen(null, ModalImagem, null, "salvar")}><FaPlus /> Adicionar Foto</button>
                         </div>
                     </div>
                     <div className='cabecalhoTabela itens'>
@@ -170,7 +170,7 @@ export default function Tabelaspainel() {
                                         <p>{foto.carrossel === 0 ? 'Principal' : 'Fotos Loja'}</p>
                                         <div>
                                             <button className='editar'
-                                                onClick={() => handleOpen(foto, ModalEvento, foto.id, "editar")}
+                                                onClick={() => handleOpen(foto, ModalImagem, foto.id, "editar")}
                                             ><MdEdit /> Editar</button>
                                             <button className='deletar' onClick={() => handleOpenDialog(foto.id, "evento")}><MdDelete /> Deletar</button>
                                         </div>

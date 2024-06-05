@@ -74,7 +74,6 @@ export default function Painel() {
                 </button>
                 {selectedItem === "Cardápio" && <TabelasCardapio/>}
                 {selectedItem === "Painel de Controle" && <Tabelaspainel/>}
-                {/* <TelaInfoPainel titulo={selectedItem} /> */}
             </section>
         </main>
     )

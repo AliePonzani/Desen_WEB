@@ -104,7 +104,7 @@ export async function buscarProdutosGrupo(id) {
     return verificar(linhas, resp[0]);
 }
 
-export async function editarProduto(grupo, cardapio, id, produto) {
+export async function editarProduto(cardapio, id, produto) {
     let comando = `
         UPDATE produto SET
         nome = ?, 
@@ -120,7 +120,7 @@ export async function editarProduto(grupo, cardapio, id, produto) {
         produto.descricao,
         produto.valor,
         produto.peso,
-        grupo,
+        produto.grupo,
         cardapio,
         id
     ]);

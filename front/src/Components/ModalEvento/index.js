@@ -201,8 +201,6 @@ export default function ModalEvento({ info, handleClose, tipo }) {
                 <div className='button_salvar'>
                     <button onClick={() => { tipo === "salvar" ? salvarEvento() : alterarEvento() }}>{tipo}</button>
                 </div>
-                {/* <div className='button_salvar'><a>Salvar</a></div> */}
-
             </div>
         </div>
     );

@@ -1,9 +1,8 @@
 import './index.scss';
 import React, { useEffect, useState } from "react";
-import { buscarPorCardapio, buscarTodos } from "../../API/chamadas";
+import { buscarPorCardapio, buscarTodos, deletar } from "../../API/chamadas";
 import { Box, Dialog, DialogActions, DialogTitle, Modal } from "@mui/material";
 import { MdDelete, MdEdit } from "react-icons/md";
-import axios from "axios";
 import ModalCardapio from "../ModalCardapio";
 import ModalProduto from "../ModalProduto";
 import { FaPlus } from "react-icons/fa6";
@@ -29,9 +28,9 @@ export default function TabelasCardapio() {
     const [open, setOpen] = useState(false);
     const handleClose = () => setOpen(false);
 
-    const deletar = async () => {
+    const deletarCardapio = async () => {
         try {
-            const resp = await axios.delete(`http://127.0.0.1:5000/${tipo}/${id}`);
+            const resp = await deletar(tipo, id);
             if (resp.status === 200) {
                 alert(`${tipo} deletado com sucesso!`);
             }
@@ -86,7 +85,7 @@ export default function TabelasCardapio() {
                     {"Realmente deseja excluir este item?"}
                 </DialogTitle>
                 <DialogActions>
-                    <button onClick={() => deletar()}>Deletar</button>
+                    <button onClick={() => deletarCardapio()}>Deletar</button>
                     <button onClick={handleCloseDialog} >Cancelar</button>
                 </DialogActions>
             </Dialog>

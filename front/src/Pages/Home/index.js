@@ -104,8 +104,8 @@ export default function Home() {
             <h1>
               {carrosselPrincipal[index]?.titulo}
             </h1>
-            <button style={{ backgroundColor: "#a97f2c", color: "#f6cabc" }}>Faça seu pedido <IoLogoWhatsapp fontSize="2rem" /></button>
-            <button style={{ backgroundColor: "#f6cabc", color: "#a97f2c" }}>Siga a gente <AiFillInstagram fontSize="2rem" /></button>
+            <a style={{ backgroundColor: "#a97f2c", color: "#f6cabc" }} alt="Link para WhatsApp da loja" href="https://wa.me/+5511958655550">Faça seu pedido <IoLogoWhatsapp fontSize="2rem" /></a>
+            <a style={{ backgroundColor: "#f6cabc", color: "#a97f2c" }} alt="Link para Instagram da loja" href="https://www.instagram.com/art.gula/reels/">Siga a gente <AiFillInstagram fontSize="2rem" /></a>
           </div>
           <div className='btnSelecionar'>
             <Stack spacing={0}>
